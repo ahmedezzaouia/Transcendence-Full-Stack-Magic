@@ -9,4 +9,6 @@ import { AuthModule } from './auth/auth.module';
     isGlobal: true,
   }),PrismaModule, AuthModule],
 })
+
+
 export class AppModule {}
