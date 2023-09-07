@@ -22,8 +22,8 @@ export default function Dashboard() {
     })();
   }, []);
 
+  // this is comming from the first authencation
   if (userId) return <div></div>;
-
   return (
     <div>
       <h1>Dashboard</h1>
