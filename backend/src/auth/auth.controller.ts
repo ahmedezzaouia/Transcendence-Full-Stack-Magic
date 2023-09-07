@@ -17,5 +17,4 @@ export class AuthController {
     return this.authServices.callback(res, req);
   }
 
-
 }
