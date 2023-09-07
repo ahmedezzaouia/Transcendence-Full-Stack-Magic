@@ -3,12 +3,12 @@ import React from "react";
 import "./from2fa.css"; 
 
 interface props {
-  qrcode: string;
+  qrcodeUrl: string;
   submitForm: (e: any) => void;
   setShowForm?: (showForm: boolean) => void;
 }
 
-export default function Form2fa({ qrcode, submitForm , setShowForm}: props) {
+export default function Form2fa({ qrcodeUrl, submitForm , setShowForm}: props) {
   return (
     <form className="form" onSubmit={(e) => submitForm(e)}>
       <span className="close" onClick={()=> setShowForm && setShowForm(false)}>X</span>
@@ -18,7 +18,7 @@ export default function Form2fa({ qrcode, submitForm , setShowForm}: props) {
           Enter the two-factor authentication code provided by the authenticator
           app
         </p>
-        {qrcode ? <img src={qrcode} alt="QR Code" /> : "Loading QR Code..."}
+        {qrcodeUrl ? <img src={qrcodeUrl} alt="QR Code" /> : "Loading QR Code..."}
       </div>
       <div className="input-fields">
         <input type="tel" placeholder="" />

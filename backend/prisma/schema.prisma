@@ -16,6 +16,7 @@ model User {
   email               String  @unique
   isTwofactorsEnabled Boolean @default(false)
   twoFactorsSecret    String?
+  qrcodeUrl           String?
   avatarUrl           String?
   accessToken         String?
 }
