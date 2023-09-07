@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import useSWR from "swr";
+import { fetchUser } from "../../../services/userServices";
 
 interface User {
   id: string;
@@ -13,32 +15,17 @@ interface User {
 export default function Profile() {
   const params = useParams();
   const userId = params.id;
-  const [user, setUser] = useState<User | null>(null);
+  const { data, error, isLoading } = useSWR(
+    `http://localhost:3001/user/${userId}`,
+    fetchUser
+  );
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const accessToken = localStorage.getItem("accessToken");
-        const response = await fetch(`http://localhost:3001/user/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        const user = await response.json();
-        if (user) {
-          setUser(user);
-        }
-      } catch (error) {
-        console.log("could not fetch user");
-      }
-    })();
-  }, []);
-
+  if (error) return <div>Failed to load</div>;
+  if (!data) return <div>Loading...</div>;
   return (
     <div>
       <h1>Profile page</h1>
-      {user ? <h2>hello : {user?.username}</h2> : null}
+      <h2>hello : {data.username}</h2>
     </div>
   );
 }
