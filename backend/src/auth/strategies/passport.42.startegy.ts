@@ -4,16 +4,14 @@ import { Strategy } from 'passport-42';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
-
-// move genearting the secret or qrcode to profile logic
-// import { authenticator } from 'otplib';
-// import { toDataURL } from 'qrcode';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class Passport42Strategy extends PassportStrategy(Strategy, '42') {
   constructor(
     private prisma: PrismaService,
     private jwt: JwtService,
+    private config: ConfigService,
   ) {
     super({
       clientID:
@@ -24,14 +22,14 @@ export class Passport42Strategy extends PassportStrategy(Strategy, '42') {
     });
   }
 
-  async  setUserToken(username:string, token:string) : Promise<User>{
+  async setUserToken(username: string, token: string): Promise<User> {
     return await this.prisma.user.update({
       where: {
         username: username,
       },
       data: {
         accessToken: token,
-      }
+      },
     });
   }
 
@@ -41,7 +39,7 @@ export class Passport42Strategy extends PassportStrategy(Strategy, '42') {
     profile: any,
   ): Promise<any> {
     try {
-      const { username, emails} = profile;
+      const { username, emails } = profile;
 
       let user = await this.prisma.user.findUnique({
         where: {
@@ -60,28 +58,11 @@ export class Passport42Strategy extends PassportStrategy(Strategy, '42') {
 
       if (user.isTwofactorsEnabled === false) {
         const payload = { sub: user.id, username };
-        const token = await this.jwt.signAsync(payload, { secret: 'ahmed@amine' });
+        const token = await this.jwt.signAsync(payload, {
+          secret: this.config.get('JWT_SECRET'),
+        });
         user = await this.setUserToken(username, token);
       }
-
-      // user already enabled two factors authenticator
-      //     const secret = authenticator.generateSecret();
-      //     const otpAuthUrl = authenticator.keyuri(user.email, 'ft_transcendence', secret);
-      //     const qrcodeDataUrl = await toDataURL(otpAuthUrl);
-
-      //     console.log("before prisma: ", qrcodeDataUrl)
-
-      //     user = await this.prisma.user.update({
-      //       where:{
-      //         email: user.email
-      //       },
-      //       data: {
-      //         twofactorsSecret:secret,
-      //         qrcodeUrl: qrcodeDataUrl
-      //       },
-      //     });
-
-      //   console.log("after prima:", user.qrcodeUrl)
       return user;
     } catch (error) {
       throw new UnauthorizedException();

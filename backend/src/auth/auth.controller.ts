@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Auth42Guard } from './guards/42.guard';
 
@@ -15,6 +15,11 @@ export class AuthController {
   @Get('callback')
   async callback(@Res() res, @Req() req) {
     return this.authServices.callback(res, req);
+  }
+
+  @Get('token')
+  async getToken(@Query('id') id:string) {
+    return this.authServices.getToken(id);
   }
 
 }
