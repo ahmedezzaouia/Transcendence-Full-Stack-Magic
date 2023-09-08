@@ -1,58 +1,63 @@
-"use client"
-import { useSearchParams } from 'next/navigation';  // Import from next/navigation
-import { useEffect, useState } from 'react';
+"use client";
+import { useSearchParams } from "next/navigation"; // Import from next/navigation
+import { useEffect, useState } from "react";
 import Form2fa from "../../components/form2fa/form2fa";
+import useSWR from "swr";
+import {fetchUserQrcode} from '@services/
 
 
 export default function Twofactors() {
-  const [qrcode, setQrcode] = useState();
+  // const [qrcode, setQrcode] = useState();
 
   const searchParams = useSearchParams();
-  const userId = searchParams.get('id');
+  const userId = searchParams.get("id");
 
-//   useEffect(() => {
-//     axios.get(`http://localhost:3001/auth/qrcode?id=${userId}`)
-//       .then(response => {
-//         console.log("qrcode get: ", response.data.qrCode)
-//         setQrcode(response.data.qrCode);
-//       })
-//       .catch(error => {
-//         console.error('Error fetching QR code:', error);
-//       });
-//   }, [qrcode]);
+  // const fetchUserQrcode = async (url:string) => {
+  //   try {
+  //     const response = await fetch(url);
+  //     const data = await response.json();
+  //     console.log(data);
+  //     return data.qrcodeUrl;
+  //   } catch (error) {
+  //     throw new Error("Failed to get qrcode for user");
+  //   }
+  // };
 
+  const { data:qrcodeUrl, error } = useSWR(`http://localhost:3001/user/qr-code?id=${userId}`,fetchUserQrcode)
 
-  const submitForm = (e:any) => {
+  const submitForm = async (e: any) => {
     // Get values from input fields
     e.preventDefault();
-    // const inputFields = document.querySelectorAll('.input-fields input');
-    // let token = '';
-    // inputFields.forEach((input) => {
-    //   token += input.value;
+    const inputFields = document.querySelectorAll('.input-fields input');
+    let token = '';
+    inputFields.forEach((input) => {
+      token += input.value;
+    });
+
+    // Send token to the backend
+    // const response = await fetch('http://localhost:3001/user/verify2f-login', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({ token, id : userId })
     // });
-  
-    // console.log('Token:', token);
-    // // Send token to the backend
-    // axios.post('http://localhost:3001/auth/verify', { token, userId })
-    //   .then(response => {
-    //     console.log('Verification successful:', response.data);
-    //     const isTokenValid = response.data.isValid;
-    //     console.log('isTokenValid:', isTokenValid);
-    //     if (isTokenValid === true) {
-    //       window.location.href = '/'
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.error('Verification failed:', error);
-    //   });
+    // const tokenData = await response.json();
+    console.log(tokenData);
+    if (tokenData.isValid === true) {
+          window.location.href = '/dashboard';
+    }
+   
   };
-  
+
+  if (error) return <div>Failed to get the QR code</div>;
+  if (!qrcodeUrl) return <div>Loading...</div>;
+
   return (
     <main>
-         <div className="form-container">
-          <Form2fa qrcode={""} submitForm={submitForm}  />
-        </div>
+      <div className="form-container">
+        <Form2fa qrcodeUrl={qrcodeUrl} submitForm={submitForm} />
+      </div>
     </main>
   );
 }
-

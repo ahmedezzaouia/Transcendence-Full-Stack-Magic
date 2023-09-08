@@ -19,7 +19,7 @@ export default function Profile() {
 
   const { data, error, isLoading } = useSWR(`http://localhost:3001/user/${userId}`, fetchUser);
 
-  const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+  const [is2FAEnabled, setIs2FAEnabled] = useState<boolean | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [qrcode, setQrcode] = useState("");
 
@@ -99,7 +99,7 @@ export default function Profile() {
       <h1>Profile page</h1>
       <h2>hello : {data.username}</h2>
       <label className="switch">
-        <input type="checkbox" checked={is2FAEnabled} onChange={handle2FAToggle} />
+        <input type="checkbox" checked={is2FAEnabled === null ? data.isTwofactorsEnabled : is2FAEnabled} onChange={handle2FAToggle} />
         <span className="slider round">Enable 2FA</span>
       </label>
     </main>

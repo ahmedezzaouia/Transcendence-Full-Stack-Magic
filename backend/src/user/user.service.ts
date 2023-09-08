@@ -38,10 +38,6 @@ export class UserService {
             qrcodeUrl: qrcodeDataUrl,
           },
         });
-        console.log(
-          'generated qrcode from enable route === ',
-          updatedUser.qrcodeUrl,
-        );
         return { qrcodeUrl: updatedUser.qrcodeUrl };
       }
     } catch (error) {
@@ -63,7 +59,7 @@ export class UserService {
         });
       }
 
-      console.log("user disabled 2fa === ", updatedUser.isTwofactorsEnabled)
+      console.log('user disabled 2fa === ', updatedUser.isTwofactorsEnabled);
       return { isDisable: !updatedUser.isTwofactorsEnabled ? true : false };
     } catch (error) {
       throw new Error('Failed to disable 2fa for user');
@@ -90,4 +86,43 @@ export class UserService {
       throw new Error('Failed to verify 2fa for user');
     }
   }
+
+  async getQrcode(id: string): Promise<{ qrcodeUrl: string }> {
+    try {
+
+      const user: User = await this.prisma.user.findUnique({
+        where: { id },
+      });
+
+      if (!user) throw new Error('User not found');
+
+      console.log('user qrcode === ', user.qrcodeUrl);
+
+      return { qrcodeUrl: user.qrcodeUrl };
+
+    } catch (error) {
+      throw new Error('Failed to retrieve user qrcode');
+    }
+  }
+
+  async verify2fLogin(id : string, token: string): Promise<{ isValid: boolean }> {
+    try {
+      // get user by id 
+      const user: User = await this.prisma.user.findUnique({
+        where: { id },
+      });
+
+      if (!user) throw new Error('User not found for getting his secret')
+
+      const isValid = authenticator.verify({
+        token: token,
+        secret: user.twoFactorsSecret,
+      });
+
+      return { isValid };
+    } catch (error) {
+      throw new Error('Failed to verify 2fa for user in first login');
+    }
+  }
+
 }
