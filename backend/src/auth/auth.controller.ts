@@ -16,10 +16,4 @@ export class AuthController {
   async callback(@Res() res, @Req() req) {
     return this.authServices.callback(res, req);
   }
-
-  @Get('token')
-  async getToken(@Query('id') id:string) {
-    return this.authServices.getToken(id);
-  }
-
 }

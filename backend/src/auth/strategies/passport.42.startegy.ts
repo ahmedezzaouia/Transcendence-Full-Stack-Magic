@@ -40,7 +40,7 @@ export class Passport42Strategy extends PassportStrategy(Strategy, '42') {
   ): Promise<any> {
     try {
       const { username, emails } = profile;
-
+      let firstLogin = false;
       let user = await this.prisma.user.findUnique({
         where: {
           username: username,
@@ -54,6 +54,7 @@ export class Passport42Strategy extends PassportStrategy(Strategy, '42') {
             email: emails[0].value,
           },
         });
+        firstLogin = true
       }
 
       if (user.isTwofactorsEnabled === false) {
@@ -63,7 +64,7 @@ export class Passport42Strategy extends PassportStrategy(Strategy, '42') {
         });
         user = await this.setUserToken(username, token);
       }
-      return user;
+      return {...user , firstLogin};
     } catch (error) {
       throw new UnauthorizedException();
     }

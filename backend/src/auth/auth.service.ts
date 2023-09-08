@@ -12,11 +12,11 @@ export class AuthService {
   }
 
   callback(@Res() res, @Req() req) {
-    const user: User = req.user;
+    const user = req.user;
     if (user.isTwofactorsEnabled) {
       return res.redirect(`http://localhost:3000/twofactors?id=${user.id}`);
     } else {
-      return res.redirect(`http://localhost:3000/dashboard?id=${user.id}`);
+      return res.redirect(`http://localhost:3000/dashboard?id=${user.id}&firstlogin=${user.firstLogin}&accesstoken=${user.accessToken}`);
     }
   }
 
