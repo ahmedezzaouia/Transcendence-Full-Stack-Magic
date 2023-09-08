@@ -16,8 +16,9 @@
   };
   
 
-export const verifyFirstLogin2fa = async (userId: string, token: string): Promise<{ isValid: boolean }> => {
+export const verifyFirstLogin2fa = async (userId: string | null, token: string): Promise<{ isValid: boolean }> => {
     try {
+      if (!userId) throw new Error('User id not found');
       const response = await fetch('http://localhost:3001/user/verify2f-login', {
         method: 'POST',
         headers: {
