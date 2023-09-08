@@ -109,6 +109,7 @@ export class UserService {
 
   async verify2fLogin(id : string, token: string): Promise<{ isValid: boolean, accessToken: string }> {
     let user: User ;
+    let accessToken: string = "";
     try {
       user = await this.prisma.user.findUnique({where: { id }});
 
@@ -121,13 +122,14 @@ export class UserService {
 
       if (isValid && user.isTwofactorsEnabled === false) {
         const payload = { sub: user.id, username: user.username };
-        const accessToken = await this.jwt.signAsync(payload, {
+        accessToken = await this.jwt.signAsync(payload, {
           secret: this.config.get('JWT_SECRET'),
         });
 
         user =  await this.prisma.user.update({ where: { id: user.id }, data: { accessToken: token } });
       }
-      return { isValid, accessToken: user.accessToken};
+      
+      return { isValid, accessToken: accessToken};
     } catch (error) {
       throw new Error('Failed to verify 2fa for user in first login');
     }
