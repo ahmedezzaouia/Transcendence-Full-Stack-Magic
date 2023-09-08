@@ -26,11 +26,15 @@ export default function Profile() {
 
   const handle2FAToggle = async () => {
     try {
-      if (data.isTwofactorsEnabled === false || is2FAEnabled === false) {
+      if (data.isTwofactorsEnabled === false &&  !is2FAEnabled) {
+        console.log("enable 2fa");
+        console.log("data.isTwofactorsEnabled ",data.isTwofactorsEnabled);
+        console.log("is2FAEnabled ",is2FAEnabled);
         const qrcodeUrl = await enable2fa();
         setShowForm(true);
         setQrcode(qrcodeUrl);
-      } else if (data.isTwofactorsEnabled === true || is2FAEnabled === true) {
+      } else if (data.isTwofactorsEnabled === true ||  is2FAEnabled === true) {
+        console.log("disable 2fa");
         const disbaleData = await disable2fa();
         console.log(disbaleData);
         setIs2FAEnabled(disbaleData.isDisable ? false : true);
@@ -49,7 +53,7 @@ export default function Profile() {
     });
     try {
       const verifyData = await verifyEnabled2fa(token);
-      if (verifyData.isValid) {
+      if (verifyData.isValid === true) {
         setShowForm(false);
         setIs2FAEnabled(true);
       }

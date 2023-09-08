@@ -1,7 +1,6 @@
 "use client";
 import React, { use, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { fetchToken } from "@/services/userServices";
 
 export default function Dashboard() {
   // const [token, setToken] = useState<string | null>(null);

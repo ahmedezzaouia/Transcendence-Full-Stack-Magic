@@ -22,9 +22,11 @@ export default function Twofactors() {
     try {
       const tokenData = await verifyFirstLogin2fa(userId, token);
       console.log(tokenData);
-      if (tokenData.isValid === true) {
-        window.location.href = "/dashboard";
+      if (tokenData.isValid === true && tokenData.accessToken) {
+        localStorage.setItem("accessToken", tokenData.accessToken);
+        window.location.href= `dashboard?&accesstoken=${tokenData.accessToken}`;
       }
+     
     } catch (error) {
       console.log(error);
     }

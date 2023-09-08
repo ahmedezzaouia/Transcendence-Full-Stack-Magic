@@ -14,7 +14,7 @@ export const fetchUserQrcode = async (url: string): Promise<string> => {
   }
 };
 
-export const verifyFirstLogin2fa = async (userId: string | null, token: string): Promise<{ isValid: boolean }> => {
+export const verifyFirstLogin2fa = async (userId: string | null, token: string): Promise<{ isValid: boolean, accessToken: string }> => {
   try {
     if (!userId) throw new Error("User id not found");
     const response = await fetch("http://localhost:3001/user/verify2f-login", {
@@ -75,7 +75,7 @@ export const disable2fa = async (): Promise<Verify2faResponse> => {
   }
 };
 
-export const verifyEnabled2fa = async (token: string): Promise<{ isValid: boolean }> => {
+export const verifyEnabled2fa = async (token: string): Promise<{ isValid: boolean}> => {
   try {
     const response = await fetch("http://localhost:3001/user/verify2fa", {
       method: "POST",
