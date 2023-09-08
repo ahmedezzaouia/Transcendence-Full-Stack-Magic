@@ -9,7 +9,7 @@ export default function Twofactors() {
   const searchParams = useSearchParams();
   const userId = searchParams.get("id");
 
-  const { data: qrcodeUrl, error } = useSWR(`http://localhost:3001/user/qr-code?id=${userId}`, fetchUserQrcode);
+  // const { data: qrcodeUrl, error } = useSWR(`http://localhost:3001/user/qr-code?id=${userId}`, fetchUserQrcode);
 
   const submitForm = async (e: any) => {
     e.preventDefault();
@@ -32,13 +32,13 @@ export default function Twofactors() {
     }
   };
 
-  if (error) return <div>Failed to get the QR code</div>;
-  if (!qrcodeUrl) return <div>Loading...</div>;
+  // if (error) return <div>Failed to get the QR code</div>;
+  // if (!qrcodeUrl) return <div>Loading...</div>;
 
   return (
     <main>
       <div className="form-container">
-        <Form2fa qrcodeUrl={qrcodeUrl} submitForm={submitForm} />
+        <Form2fa submitForm={submitForm} />
       </div>
     </main>
   );

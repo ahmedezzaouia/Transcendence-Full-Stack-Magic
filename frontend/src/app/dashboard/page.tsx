@@ -9,7 +9,7 @@ export default function Dashboard() {
   const accessToken = searchParams.get("accesstoken");
   const isfirstLogin = searchParams.get("firstlogin");
 
-  console.log(userId, accessToken, isfirstLogin);
+  console.log(userId, accessToken, );
 
   useEffect(() => {
     if (accessToken) {
@@ -17,6 +17,7 @@ export default function Dashboard() {
     }
     if (userId && isfirstLogin === "true") {
       window.location.href = `/profile/${userId}`;
+
     }
   }, []);
 
