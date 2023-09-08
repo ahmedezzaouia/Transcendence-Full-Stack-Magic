@@ -37,7 +37,7 @@ export default function Twofactors() {
   return (
     <main>
       <div className="form-container">
-        <Form2fa submitForm={submitForm} isError={isError} />
+        <Form2fa submitForm={submitForm} isError={isError}  setIsError={setIsError}/>
       </div>
     </main>
   );

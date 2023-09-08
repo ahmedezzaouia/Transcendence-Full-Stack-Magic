@@ -28,18 +28,19 @@ export default function Profile() {
 
   const handle2FAToggle = async () => {
     try {
-      if (data.isTwofactorsEnabled === false &&  !is2FAEnabled) {
+      if (data.isTwofactorsEnabled === false) {
         console.log("enable 2fa");
         console.log("data.isTwofactorsEnabled ",data.isTwofactorsEnabled);
         console.log("is2FAEnabled ",is2FAEnabled);
         const qrcodeUrl = await enable2fa();
         setShowForm(true);
         setQrcode(qrcodeUrl);
-      } else if (data.isTwofactorsEnabled === true ||  is2FAEnabled === true) {
+      } else if (data.isTwofactorsEnabled === true) {
         console.log("disable 2fa");
         const disbaleData = await disable2fa();
         console.log(disbaleData);
         setIs2FAEnabled(disbaleData.isDisable ? false : true);
+        data.isTwofactorsEnabled = disbaleData.isDisable ? false : true;
       }
     } catch (error) {
       console.log(error);
@@ -57,7 +58,8 @@ export default function Profile() {
       const verifyData = await verifyEnabled2fa(token);
       if (verifyData.isValid === true) {
         setShowForm(false);
-        setIs2FAEnabled(true);
+        setIs2FAEnabled(true);      
+        data.isTwofactorsEnabled = true;
       }
       else{
         setIsError(true);
@@ -73,7 +75,7 @@ export default function Profile() {
     <main>
       {showForm ? (
         <div className="form-container">
-          <Form2fa qrcodeUrl={qrcode} submitForm={handle2FASubmit} setShowForm={setShowForm} isError={isError}/>
+          <Form2fa qrcodeUrl={qrcode} submitForm={handle2FASubmit} setShowForm={setShowForm} isError={isError} setIsError={setIsError}/>
         </div>
       ) : null}
       <h1>Profile page</h1>
