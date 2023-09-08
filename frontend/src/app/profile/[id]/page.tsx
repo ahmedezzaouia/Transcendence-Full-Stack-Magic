@@ -17,6 +17,8 @@ interface User {
 export default function Profile() {
   const params = useParams();
   const userId = params.id;
+  const [isError, setIsError] = useState(false);
+
 
   const { data, error } = useSWR(`http://localhost:3001/user/${userId}`, fetchUser);
 
@@ -57,6 +59,9 @@ export default function Profile() {
         setShowForm(false);
         setIs2FAEnabled(true);
       }
+      else{
+        setIsError(true);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +73,7 @@ export default function Profile() {
     <main>
       {showForm ? (
         <div className="form-container">
-          <Form2fa qrcodeUrl={qrcode} submitForm={handle2FASubmit} setShowForm={setShowForm} />
+          <Form2fa qrcodeUrl={qrcode} submitForm={handle2FASubmit} setShowForm={setShowForm} isError={isError}/>
         </div>
       ) : null}
       <h1>Profile page</h1>

@@ -6,9 +6,10 @@ interface props {
   qrcodeUrl?: string;
   submitForm: (e: any) => void;
   setShowForm?: (showForm: boolean) => void;
+  isError: boolean;
 }
 
-export default function Form2fa({ qrcodeUrl, submitForm , setShowForm}: props) {
+export default function Form2fa({ qrcodeUrl, submitForm , setShowForm, isError}: props) {
   return (
     <form className="form" onSubmit={(e) => submitForm(e)}>
       <span className="close" onClick={()=> setShowForm && setShowForm(false)}>X</span>
@@ -33,6 +34,7 @@ export default function Form2fa({ qrcodeUrl, submitForm , setShowForm}: props) {
           Verify
         </button>
       </div>
+     {isError ? <button className="red">Error: Invalid Token</button> : null}
     </form>
   );
 }
