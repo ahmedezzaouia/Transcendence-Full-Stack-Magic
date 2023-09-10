@@ -8,8 +8,12 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService, private jwt: JwtService, private config: ConfigService) {}
-  
+  constructor(
+    private prisma: PrismaService,
+    private jwt: JwtService,
+    private config: ConfigService,
+  ) {}
+
   async getUser(id: string): Promise<User> {
     let user: User;
     try {
@@ -17,16 +21,17 @@ export class UserService {
         where: { id },
       });
       if (!user) throw new Error('User not found');
-      delete user.twoFactorsSecret
+      delete user.twoFactorsSecret;
       return user;
     } catch (error) {
       throw new HttpException(
         {
-        status: HttpStatus.BAD_REQUEST, error: error.message 
-      },
-        HttpStatus.BAD_REQUEST
+          status: HttpStatus.BAD_REQUEST,
+          error: error.message,
+        },
+        HttpStatus.BAD_REQUEST,
       );
-      }
+    }
   }
 
   async enable2fa(user: User): Promise<{ qrcodeUrl: string }> {
@@ -45,7 +50,7 @@ export class UserService {
             twoFactorsSecret: secret,
           },
         });
-        return { qrcodeUrl: qrcodeDataUrl};
+        return { qrcodeUrl: qrcodeDataUrl };
       }
     } catch (error) {
       throw new Error('Failed to enable 2fa for user');
@@ -91,32 +96,16 @@ export class UserService {
       throw new Error('Failed to verify 2fa for user');
     }
   }
-
-  // async getQrcode(id: string): Promise<{ qrcodeUrl: string }> {
-  //   try {
-
-  //     const user: User = await this.prisma.user.findUnique({
-  //       where: { id },
-  //     });
-
-  //     if (!user) throw new Error('User not found');
-
-  //     console.log('user qrcode === ', user.qrcodeUrl);
-
-  //     return { qrcodeUrl: user.qrcodeUrl };
-
-  //   } catch (error) {
-  //     throw new Error('Failed to retrieve user qrcode');
-  //   }
-  // }
-
-  async verify2fLogin(id : string, token: string): Promise<{ isValid: boolean, accessToken: string }> {
-    let user: User ;
-    let accessToken: string = "";
+  async verify2fLogin(
+    id: string,
+    token: string,
+  ): Promise<{ isValid: boolean; accessToken: string }> {
+    let user: User;
+    let accessToken: string = '';
     try {
-      user = await this.prisma.user.findUnique({where: { id }});
+      user = await this.prisma.user.findUnique({ where: { id } });
 
-      if (!user) throw new Error('User not found for getting his secret')
+      if (!user) throw new Error('User not found for getting his secret');
 
       const isValid = authenticator.verify({
         token: token,
@@ -125,17 +114,14 @@ export class UserService {
 
       if (isValid === true && user.isTwofactorsEnabled === true) {
         const payload = { sub: user.id, username: user.username };
-          accessToken = await this.jwt.signAsync(payload, {
+        accessToken = await this.jwt.signAsync(payload, {
           secret: this.config.get('JWT_SECRET'),
         });
-
-        // user =  await this.prisma.user.update({ where: { id: user.id }, data: { accessToken: accessToken } });
       }
-      
-      return { isValid, accessToken};
+
+      return { isValid, accessToken };
     } catch (error) {
       throw new Error('Failed to verify 2fa for user in first login');
     }
   }
-
 }

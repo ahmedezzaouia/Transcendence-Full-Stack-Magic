@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Form2fa from "../../../components/form2fa/form2fa";
 import { fetchUser } from "@/services/userServices";
-import { use2FAFormAuth } from "@/hooks/useForm";
-import { use2FASwitch } from "@/hooks/use2FaSwitch";
+import { use2FAFormAuth } from "@/hooks";
+import { use2FASwitch } from "@/hooks";
 import useSWR from "swr";
 
 export default function Profile() {

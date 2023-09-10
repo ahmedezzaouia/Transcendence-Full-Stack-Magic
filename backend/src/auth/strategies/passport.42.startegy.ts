@@ -22,17 +22,6 @@ export class Passport42Strategy extends PassportStrategy(Strategy, '42') {
     });
   }
 
-  // async setUserToken(username: string, token: string): Promise<User> {
-  //   return await this.prisma.user.update({
-  //     where: {
-  //       username: username,
-  //     },
-  //     data: {
-  //       accessToken: token,
-  //     },
-  //   });
-  // }
-
   async validate(
     accessToken: string,
     refreshToken: string,
@@ -63,7 +52,6 @@ export class Passport42Strategy extends PassportStrategy(Strategy, '42') {
         token = await this.jwt.signAsync(payload, {
           secret: this.config.get('JWT_SECRET'),
         });
-        // user = await this.setUserToken(username, token);
       }
       return {...user , firstLogin, accessToken: token};
     } catch (error) {

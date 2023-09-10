@@ -1,5 +1,5 @@
 import { verifyEnabled2fa } from "@/services/twofaServices";
-import React, { useEffect, useRef, useState } from "react";
+import React, {useState } from "react";
 
 interface Use2FAFormAuthProps {
   onVerifyUserSuccess?: () => void;

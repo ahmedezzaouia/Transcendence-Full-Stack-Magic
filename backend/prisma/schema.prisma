@@ -17,5 +17,4 @@ model User {
   isTwofactorsEnabled Boolean @default(false)
   twoFactorsSecret    String?
   avatarUrl           String?
-  // accessToken         String?
 }
