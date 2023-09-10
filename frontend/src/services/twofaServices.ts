@@ -1,18 +1,18 @@
-export const fetchUserQrcode = async (url: string): Promise<string> => {
-  try {
-    const response = await fetch(url);
+// export const fetchUserQrcode = async (url: string): Promise<string> => {
+//   try {
+//     const response = await fetch(url);
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch QR code: ${response.statusText}`);
-    }
+//     if (!response.ok) {
+//       throw new Error(`Failed to fetch QR code: ${response.statusText}`);
+//     }
 
-    const data = await response.json();
-    return data.qrcodeUrl;
-  } catch (error) {
-    console.error("Error in fetchUserQrcode:", error);
-    throw new Error("Failed to get QR code for user");
-  }
-};
+//     const data = await response.json();
+//     return data.qrcodeUrl;
+//   } catch (error) {
+//     console.error("Error in fetchUserQrcode:", error);
+//     throw new Error("Failed to get QR code for user");
+//   }
+// };
 
 export const verifyFirstLogin2fa = async (userId: string | null, token: string): Promise<{ isValid: boolean, accessToken: string }> => {
   try {
@@ -36,7 +36,7 @@ export const verifyFirstLogin2fa = async (userId: string | null, token: string):
   }
 };
 
-export const enable2fa = async (): Promise<string> => {
+export const generateQrcodeUrl = async (): Promise<string> => {
   try {
     const response = await fetch("http://localhost:3001/user/enable2fa", {
       method: "POST",

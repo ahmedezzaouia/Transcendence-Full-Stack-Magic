@@ -8,9 +8,6 @@ export default function Dashboard() {
   const userId = searchParams.get("id");
   const accessToken = searchParams.get("accesstoken");
   const isfirstLogin = searchParams.get("firstlogin");
-
-  console.log(userId, accessToken, );
-
   useEffect(() => {
     if (accessToken) {
       localStorage.setItem("accessToken", accessToken);
@@ -30,3 +27,6 @@ export default function Dashboard() {
     </div>
   );
 }
+
+
+

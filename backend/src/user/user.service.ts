@@ -1,4 +1,4 @@
-import { Injectable, Req } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Req } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { authenticator } from 'otplib';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService, private jwt: JwtService, private config: ConfigService) {}
-
+  
   async getUser(id: string): Promise<User> {
     let user: User;
     try {
@@ -17,10 +17,16 @@ export class UserService {
         where: { id },
       });
       if (!user) throw new Error('User not found');
+      delete user.twoFactorsSecret
       return user;
     } catch (error) {
-      throw new Error('Failed to retrieve user');
-    }
+      throw new HttpException(
+        {
+        status: HttpStatus.BAD_REQUEST, error: error.message 
+      },
+        HttpStatus.BAD_REQUEST
+      );
+      }
   }
 
   async enable2fa(user: User): Promise<{ qrcodeUrl: string }> {
@@ -33,14 +39,13 @@ export class UserService {
           secret,
         );
         const qrcodeDataUrl = await toDataURL(otpAuthUrl);
-        let updatedUser: User = await this.prisma.user.update({
+        await this.prisma.user.update({
           where: { username: user.username },
           data: {
             twoFactorsSecret: secret,
-            qrcodeUrl: qrcodeDataUrl,
           },
         });
-        return { qrcodeUrl: updatedUser.qrcodeUrl };
+        return { qrcodeUrl: qrcodeDataUrl};
       }
     } catch (error) {
       throw new Error('Failed to enable 2fa for user');
@@ -55,13 +60,11 @@ export class UserService {
           where: { username: user.username },
           data: {
             twoFactorsSecret: null,
-            qrcodeUrl: null,
+            // qrcodeUrl: null,
             isTwofactorsEnabled: false,
           },
         });
       }
-
-      console.log('user disabled 2fa === ', updatedUser.isTwofactorsEnabled);
       return { isDisable: !updatedUser.isTwofactorsEnabled ? true : false };
     } catch (error) {
       throw new Error('Failed to disable 2fa for user');
@@ -89,23 +92,23 @@ export class UserService {
     }
   }
 
-  async getQrcode(id: string): Promise<{ qrcodeUrl: string }> {
-    try {
+  // async getQrcode(id: string): Promise<{ qrcodeUrl: string }> {
+  //   try {
 
-      const user: User = await this.prisma.user.findUnique({
-        where: { id },
-      });
+  //     const user: User = await this.prisma.user.findUnique({
+  //       where: { id },
+  //     });
 
-      if (!user) throw new Error('User not found');
+  //     if (!user) throw new Error('User not found');
 
-      console.log('user qrcode === ', user.qrcodeUrl);
+  //     console.log('user qrcode === ', user.qrcodeUrl);
 
-      return { qrcodeUrl: user.qrcodeUrl };
+  //     return { qrcodeUrl: user.qrcodeUrl };
 
-    } catch (error) {
-      throw new Error('Failed to retrieve user qrcode');
-    }
-  }
+  //   } catch (error) {
+  //     throw new Error('Failed to retrieve user qrcode');
+  //   }
+  // }
 
   async verify2fLogin(id : string, token: string): Promise<{ isValid: boolean, accessToken: string }> {
     let user: User ;
@@ -126,7 +129,7 @@ export class UserService {
           secret: this.config.get('JWT_SECRET'),
         });
 
-        user =  await this.prisma.user.update({ where: { id: user.id }, data: { accessToken: token } });
+        // user =  await this.prisma.user.update({ where: { id: user.id }, data: { accessToken: accessToken } });
       }
       
       return { isValid, accessToken};

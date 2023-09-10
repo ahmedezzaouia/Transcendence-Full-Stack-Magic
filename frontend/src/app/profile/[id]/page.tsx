@@ -1,90 +1,61 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import useSWR from "swr";
-import { fetchUser } from "@/services/userServices";
 import Form2fa from "../../../components/form2fa/form2fa";
-import { enable2fa, disable2fa, verifyEnabled2fa } from "@services/twofaServices";
-
-interface User {
-  id: string;
-  username: string;
-  email: string;
-  avatarUrl: string;
-}
+import { fetchUser } from "@/services/userServices";
+import { use2FAFormAuth } from "@/hooks/useForm";
+import { use2FASwitch } from "@/hooks/use2FaSwitch";
+import useSWR from "swr";
 
 export default function Profile() {
   const params = useParams();
-  const userId = params.id;
-  const [isError, setIsError] = useState(false);
+  const userId = params.id as string;
 
+  const { data: user, error } = useSWR(
+    `http://localhost:3001/user/${userId}`,
+    fetchUser
+  );
 
-  const { data, error } = useSWR(`http://localhost:3001/user/${userId}`, fetchUser);
+  const { formStats, verifyTokenSubmission } = use2FAFormAuth({
+    onVerifyUserSuccess: () => setIs2FAEnabled(true),
+  });
 
-  const [is2FAEnabled, setIs2FAEnabled] = useState<boolean | null>(null);
-  const [showForm, setShowForm] = useState(false);
-  const [qrcode, setQrcode] = useState("");
+  let { is2FAEnabled, setIs2FAEnabled, toggle2faSwitch } = use2FASwitch({
+    onEnable: (qrcodeUrl) => {
+      formStats.setShowForm(true);
+      formStats.setQrcode(qrcodeUrl);
+    },
+  });
 
-  const handle2FAToggle = async () => {
-    try {
-      if (data.isTwofactorsEnabled === false) {
-        console.log("enable 2fa");
-        console.log("data.isTwofactorsEnabled ",data.isTwofactorsEnabled);
-        console.log("is2FAEnabled ",is2FAEnabled);
-        const qrcodeUrl = await enable2fa();
-        setShowForm(true);
-        setQrcode(qrcodeUrl);
-      } else if (data.isTwofactorsEnabled === true) {
-        console.log("disable 2fa");
-        const disbaleData = await disable2fa();
-        console.log(disbaleData);
-        setIs2FAEnabled(disbaleData.isDisable ? false : true);
-        data.isTwofactorsEnabled = disbaleData.isDisable ? false : true;
-      }
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    if (user) {
+      setIs2FAEnabled(user.isTwofactorsEnabled);
     }
-  };
+  }, [user]);
 
-  const handle2FASubmit = async (e: any) => {
-    e.preventDefault();
-    const inputFields = document.querySelectorAll(".input-fields input");
-    let token = "";
-    inputFields.forEach((input) => {
-      token += input.value;
-    });
-    try {
-      const verifyData = await verifyEnabled2fa(token);
-      if (verifyData.isValid === true) {
-        setShowForm(false);
-        setIs2FAEnabled(true);      
-        data.isTwofactorsEnabled = true;
-      }
-      else{
-        setIsError(true);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  if (error) return <div>Failed to load</div>;
-  if (!data) return <div>Loading...</div>;
+  if (error) return <div>User not found or failed to load user data</div>;
+  if (!user) return <div>Loading user data...</div>;
   return (
     <main>
-      {showForm ? (
+      {formStats.showForm ? (
         <div className="form-container">
-          <Form2fa qrcodeUrl={qrcode} submitForm={handle2FASubmit} setShowForm={setShowForm} isError={isError} setIsError={setIsError}/>
+          <Form2fa
+            qrcodeUrl={formStats.qrcode}
+            submitForm={verifyTokenSubmission}
+            setShowForm={formStats.setShowForm}
+            isError={formStats.isFromError}
+            setIsError={formStats.setIsFromError}
+          />
         </div>
       ) : null}
       <h1>Profile page</h1>
-      <h2>hello : {data.username}</h2>
+      <h2>hello : {user.username}</h2>
       <label className="switch">
         <input
           type="checkbox"
-          checked={is2FAEnabled === null ? data.isTwofactorsEnabled : is2FAEnabled}
-          onChange={handle2FAToggle}
+          checked={is2FAEnabled}
+          onChange={toggle2faSwitch}
         />
         <span className="slider round">Enable 2FA</span>
       </label>

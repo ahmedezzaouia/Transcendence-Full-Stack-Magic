@@ -20,21 +20,21 @@ export class AuthService {
     }
   }
 
-  async getToken(id: string) : Promise<{accessToken: string}> {
-    let user: User;
-    try {
-      user = await this.prisma.user.findUnique({
-        where: { id },
-      });
-      if (!user) throw new Error('User not found');
+//   async getToken(id: string) : Promise<{accessToken: string}> {
+//     let user: User;
+//     try {
+//       user = await this.prisma.user.findUnique({
+//         where: { id },
+//       });
+//       if (!user) throw new Error('User not found');
 
-      if (!user.accessToken)
-        throw new Error('Access token not available for this user');
+//       if (!user.accessToken)
+//         throw new Error('Access token not available for this user');
 
-      console.log("gettoken route", user.accessToken);
-      return {accessToken: user.accessToken};
-    } catch (e) {
-      throw new Error('Failed to retrieve access token');
-    }
-  }
+//       console.log("gettoken route", user.accessToken);
+//       return {accessToken: user.accessToken};
+//     } catch (e) {
+//       throw new Error('Failed to retrieve access token');
+//     }
+//   }
 }

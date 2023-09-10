@@ -22,22 +22,23 @@ export class Passport42Strategy extends PassportStrategy(Strategy, '42') {
     });
   }
 
-  async setUserToken(username: string, token: string): Promise<User> {
-    return await this.prisma.user.update({
-      where: {
-        username: username,
-      },
-      data: {
-        accessToken: token,
-      },
-    });
-  }
+  // async setUserToken(username: string, token: string): Promise<User> {
+  //   return await this.prisma.user.update({
+  //     where: {
+  //       username: username,
+  //     },
+  //     data: {
+  //       accessToken: token,
+  //     },
+  //   });
+  // }
 
   async validate(
     accessToken: string,
     refreshToken: string,
     profile: any,
   ): Promise<any> {
+    let token: string
     try {
       const { username, emails } = profile;
       let firstLogin = false;
@@ -59,12 +60,12 @@ export class Passport42Strategy extends PassportStrategy(Strategy, '42') {
 
       if (user.isTwofactorsEnabled === false) {
         const payload = { sub: user.id, username };
-        const token = await this.jwt.signAsync(payload, {
+        token = await this.jwt.signAsync(payload, {
           secret: this.config.get('JWT_SECRET'),
         });
-        user = await this.setUserToken(username, token);
+        // user = await this.setUserToken(username, token);
       }
-      return {...user , firstLogin};
+      return {...user , firstLogin, accessToken: token};
     } catch (error) {
       throw new UnauthorizedException();
     }

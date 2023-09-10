@@ -6,10 +6,10 @@ import { AuthJwtGuard } from 'src/auth/guards/jwt.guard';
 export class UserController {
   constructor(private userServices: UserService) {}
 
-  @Get("qr-code")
-  async getQrcode(@Query('id') id: string) {
-    return this.userServices.getQrcode(id);
-  }
+  // @Get("qr-code")
+  // async getQrcode(@Query('id') id: string) {
+  //   return this.userServices.getQrcode(id);
+  // }
 
   @Post('verify2f-login')
   async verify2fLogin(@Req() req) {

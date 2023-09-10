@@ -6,30 +6,18 @@ export const fetchUser = async (url: string) => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to fetch user: ${errorData.message || 'Response not OK'}`);
+    }
+    
     const user = await response.json();
+    if (!user) {
+      throw new Error("Failed to fetch user: User data is empty");
+    }
     return user;
   } catch (error) {
-    console.log("could not fetch user");
-    throw new Error("could not fetch user");
+    console.log("Error fetching user", error);
+    throw new Error("Unexpected error while fetching user");
   }
 };
-
-// export const fetchToken = async (
-//     userId: string
-//   ): Promise<string | null> => {
-//     let accessToken: string = "";
-//     try {
-//       const response = await fetch(
-//         `http://localhost:3001/auth/token?id=${userId}`
-//       );
-//       if (response.ok) {
-//         const data = await response.json();
-//         accessToken = data.accessToken;
-//       }
-//       return accessToken;
-//     } catch (error) {
-//       console.error("There was an error fetching the token", error);
-//       return null;
-//     }
-//   };
-  
