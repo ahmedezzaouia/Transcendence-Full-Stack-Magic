@@ -8,3 +8,35 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: nest
+    networks:
+      - web_42_network
+
+  backend:
+    build: ./backend
+    ports:
+      - 3001:3001
+    depends_on:
+      - postgres
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/usr/backend
+    networks:
+      - web_42_network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    # env_file:
+    #   - ./frontend/.env
+    volumes:
+      - ./frontend:/usr/frontend
+    networks:
+      - web_42_network
+
+networks:
+  web_42_network:
+    driver: bridge
