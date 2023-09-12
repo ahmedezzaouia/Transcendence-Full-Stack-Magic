@@ -2,41 +2,44 @@ version: '3.8'
 services:
   postgres:
     image: postgres:13
+    container_name: postgres
     ports:
       - 5432:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: nest
-    networks:
-      - web_42_network
+    volumes:
+      - type: volume
+        source: postgres_data
+        target: /var/lib/postgresql/data
 
   backend:
     build: ./backend
+    container_name: backend
     ports:
       - 3001:3001
+      - 5555:5555
     depends_on:
       - postgres
     env_file:
       - ./backend/.env
     volumes:
-      - ./backend:/usr/backend
-    networks:
-      - web_42_network
+      - type: bind
+        source: ./backend
+        target: /app
 
   frontend:
     build: ./frontend
+    container_name: frontend
     ports:
       - 3000:3000
     depends_on:
       - backend
-    # env_file:
-    #   - ./frontend/.env
     volumes:
-      - ./frontend:/usr/frontend
-    networks:
-      - web_42_network
+      - type: bind
+        source: ./frontend
+        target: /app
 
-networks:
-  web_42_network:
-    driver: bridge
+volumes:
+  postgres_data:
