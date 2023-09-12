@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect } from 'react';
 import {NavigationLayout} from '@/components'
+import 'flowbite';
 
 export default function Home () {
   return(
