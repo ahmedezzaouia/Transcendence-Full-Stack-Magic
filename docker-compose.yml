@@ -9,10 +9,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: nest
-    volumes:
-      - type: volume
-        source: postgres_data
-        target: /var/lib/postgresql/data
+    
 
   backend:
     build: ./backend
@@ -25,9 +22,8 @@ services:
     env_file:
       - ./backend/.env
     volumes:
-      - type: bind
-        source: ./backend
-        target: /app
+      - ./backend:/app
+      - /app/node_modules
 
   frontend:
     build: ./frontend
@@ -37,9 +33,5 @@ services:
     depends_on:
       - backend
     volumes:
-      - type: bind
-        source: ./frontend
-        target: /app
-
-volumes:
-  postgres_data:
+      - ./frontend:/app
+      - /app/node_modules

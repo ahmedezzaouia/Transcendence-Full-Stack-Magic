@@ -6,6 +6,7 @@ import { toDataURL } from 'qrcode';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
+
 @Injectable()
 export class UserService {
   constructor(
