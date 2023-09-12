@@ -7,6 +7,7 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
+import {HeaderContent} from '@/components'
 
 const { Header, Sider, Content } = Layout;
 
@@ -44,7 +45,7 @@ const NavigationLayout: React.FC = () => {
         />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Header style={{ padding: 0, background: "#0F0F0F", display:"flex", alignItems:"center"}}>
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -53,8 +54,11 @@ const NavigationLayout: React.FC = () => {
               fontSize: '16px',
               width: 64,
               height: 64,
+              color:"white"
             }}
           />
+          <HeaderContent/>
+          
         </Header>
         <Content
           style={{
