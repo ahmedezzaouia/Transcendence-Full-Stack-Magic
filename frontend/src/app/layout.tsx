@@ -1,6 +1,5 @@
 import React from "react";
 import { Inter } from "next/font/google";
-import "flowbite";
 
 import StyledComponentsRegistry from "./antdRegistry";
 import "@/app/globals.css";
