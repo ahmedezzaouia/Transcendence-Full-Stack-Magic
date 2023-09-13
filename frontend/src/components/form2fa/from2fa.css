@@ -22,7 +22,6 @@
     --af-white: #f3f3f3;
     --ch-white: #e1e1e1;
     --tomato: #fa5656;
-    font-family: Helvetica, sans-serif;
     padding: 65px;
     display: flex;
     max-width: 720px;
@@ -73,7 +72,6 @@
     width: 2.5em;
     outline: none;
     text-align: center;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 1.5rem;
     color: var(--af-white);
     border-radius: 5px;
