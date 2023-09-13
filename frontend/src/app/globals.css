@@ -171,3 +171,110 @@ main{
   line-height: 96px; /* 120% */
   text-transform: uppercase;
 }
+
+
+/*     style for header */
+
+nav{
+  background-color: #0F0F0F !important;
+  border: none;
+  position: static !important;
+}
+
+
+.nav-items{
+  gap: 0.5rem;
+padding-left: 9rem;
+}
+
+nav .nav-searchForm{
+  width: 50%;
+
+}
+nav .nav-searchForm form {
+    width: 100% !important;
+}
+nav .nav-searchForm input{
+  border-radius: 50px;
+  background: #1C1F37;
+  border: none;
+  outline-color: #353854;
+
+}
+
+nav .nav-searchForm button{
+  border-radius: 50px;
+  background-color: white;
+  color: black !important;
+  border: none;
+  outline-color: #353854;
+}
+
+nav .nav-searchForm button:hover{
+  background-color: #353854;
+  color: white !important;
+}
+
+@media screen and (max-width: 640px) {
+  .nav-items{
+    flex-wrap: wrap;
+    padding: 0;
+  }
+  nav .nav-searchForm{
+    width: 100%;
+    order: 1;
+    justify-content: center;
+    align-items: center;
+  }
+  nav .nav-searchForm form {
+    width: 90% !important;
+  }
+}
+
+
+.nav-avatars_notificationIcon {
+  background: #1C1F37;
+  padding: 0.5rem;
+  color: white;
+  border-radius: 100%;
+}
+
+.nav-avatars_notificationIcon svg{
+color: white !important;
+
+}
+.notification-badge{
+  background: red;
+  height: 10px;
+  width: 10px;
+  border-radius: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+aside{
+  padding: 0!important;
+}
+
+aside, aside div{
+  background-color: #141627 !important;
+  border: none
+}
+
+aside ul a{
+  color: white !important;
+}
+aside ul li a:hover{
+  background-color: #353854 !important;
+  color: black;
+}
+
+.logo-container{
+  background: aquamarine;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
