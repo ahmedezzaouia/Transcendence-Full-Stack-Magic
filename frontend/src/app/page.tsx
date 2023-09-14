@@ -1,4 +1,6 @@
 "use client";
+import 'flowbite'
+
 import React from "react";
 export default function Home() {
   return (
