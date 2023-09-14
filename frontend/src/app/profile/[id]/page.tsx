@@ -7,7 +7,7 @@ import { fetchUser } from "@/services/userServices";
 import { use2FAFormAuth } from "@/hooks";
 import { use2FASwitch } from "@/hooks";
 import useSWR from "swr";
-import { Achievements, GameHistory, ProfileCover } from "@/components";
+import { Achievements, GameHistory, Loading, ProfileCover } from "@/components";
 
 export default function Profile() {
   const params = useParams();
@@ -32,8 +32,8 @@ export default function Profile() {
     }
   }, [user]);
 
-  // if (error) return <div>User not found or failed to load user data</div>;
-  // if (!user) return <div>Loading user data...</div>;
+  if (error) return <div style={{color:"red"}}>User not found or failed to load user data</div>;
+  if (!user) return <Loading/>;
   return (
     <>
       {formStats.showForm ? (
@@ -58,7 +58,7 @@ export default function Profile() {
         <span className="slider round">Enable 2FA</span>
       </label> */}
 
-      <ProfileCover />
+      <ProfileCover user ={user}/>
       <GameHistory />
       <Achievements />
     </>

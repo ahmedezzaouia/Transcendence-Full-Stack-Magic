@@ -1,8 +1,10 @@
 "use client";
 import React, { use, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { UserEditForm } from "@/components";
 
 export default function Dashboard() {
+  const [showModal, setShowModal] = useState(false);
   // const [token, setToken] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const userId = searchParams.get("id");
@@ -24,6 +26,7 @@ export default function Dashboard() {
   return (
     <div>
       <h1>Dashboard page</h1>
+      <UserEditForm  showModal={showModal} setShowModal={setShowModal} />
     </div>
   );
 }

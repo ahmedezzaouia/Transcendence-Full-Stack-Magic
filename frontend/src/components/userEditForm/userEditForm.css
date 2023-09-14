@@ -1,0 +1,16 @@
+
+.userModal-container{
+    background: aquamarine;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    height: 600px;
+}
+.userModal {
+    position: relative;
+}
+.userModal .close{
+    
+    position: absolute;
+
+}

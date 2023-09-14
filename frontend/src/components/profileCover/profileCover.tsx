@@ -3,7 +3,7 @@ import "./profileCover.css";
 
 import Image from "next/image";
 
-const ProfileCover = () => {
+const ProfileCover = ({user}:any) => {
   return (
     <section className="profileCover shadow-lg rounded-2xl w-100">
       <img alt="profil" src="https://st2.depositphotos.com/17620692/43225/v/450/depositphotos_432259324-stock-illustration-abstract-stripe-blue-background-dynamic.jpg" className="w-full mb-4 rounded-t-lg h-28" />
@@ -12,11 +12,11 @@ const ProfileCover = () => {
         <a href="#" className="relative block">
           <img
             alt="profil"
-            src="https://st2.depositphotos.com/17620692/43225/v/450/depositphotos_432259324-stock-illustration-abstract-stripe-blue-background-dynamic.jpg"
+            src={user.avatarUrl}
             className="mx-auto object-cover rounded-full h-16 w-16  border-2 border-white dark:border-gray-800"
           />
         </a>
-        <p className="mt-2 text-xl font-medium text-gray-800 dark:text-white">Ahmez-za</p>
+        <p className="mt-2 text-xl font-medium text-gray-800 dark:text-white">{user.username}</p>
         </div>
 
         <div className=" w-full p-2 mt-4 rounded-lg">
