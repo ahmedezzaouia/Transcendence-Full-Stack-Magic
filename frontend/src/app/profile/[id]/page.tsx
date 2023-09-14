@@ -7,11 +7,12 @@ import { fetchUser } from "@/services/userServices";
 import { use2FAFormAuth } from "@/hooks";
 import { use2FASwitch } from "@/hooks";
 import useSWR from "swr";
-import { Achievements, GameHistory, Loading, ProfileCover } from "@/components";
+import { Achievements, GameHistory, Loading, ProfileCover, UserEditForm } from "@/components";
 
 export default function Profile() {
   const params = useParams();
   const userId = params.id as string;
+  const [showModal, setShowModal] = useState(false);
 
   const { data: user, error } = useSWR(`http://localhost:3001/user/${userId}`, fetchUser);
 
@@ -32,9 +33,17 @@ export default function Profile() {
     }
   }, [user]);
 
-  if (error) return <div style={{color:"red"}}>User not found or failed to load user data</div>;
-  if (!user) return <Loading/>;
-  return (
+  if (error) return <div style={{ color: "red" }}>User not found or failed to load user data</div>;
+  if (!user) return <Loading />;
+  return showModal ? (
+    <UserEditForm
+      showModal={showModal}
+      setShowModal={setShowModal}
+      defaultImage={user.avatarUrl}
+      is2FAEnabled={is2FAEnabled}
+      toggle2faSwitch={toggle2faSwitch}
+    />
+  ) : (
     <>
       {formStats.showForm ? (
         <div className="form-container">
@@ -58,7 +67,7 @@ export default function Profile() {
         <span className="slider round">Enable 2FA</span>
       </label> */}
 
-      <ProfileCover user ={user}/>
+      <ProfileCover user={user} setShowModal={setShowModal} />
       <GameHistory />
       <Achievements />
     </>

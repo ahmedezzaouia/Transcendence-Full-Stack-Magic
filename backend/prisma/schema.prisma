@@ -24,6 +24,6 @@ model User {
   email               String  @unique
   isTwofactorsEnabled Boolean @default(false)
   twoFactorsSecret    String?
-  avatarUrl           String?
+  avatarUrl           String
   status              UserStatus @default(OFFLINE)
 }

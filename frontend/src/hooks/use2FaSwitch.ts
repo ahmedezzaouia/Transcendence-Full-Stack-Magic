@@ -13,8 +13,6 @@ export const use2FASwitch = ({ onEnable }: Use2faSwitchProps) => {
           if (is2FAEnabled === false) {
             console.log("enable 2fa");
             const qrcodeUrl = await generateQrcodeUrl();
-            // setShowForm(true);
-            // setQrcode(qrcodeUrl);
             onEnable && onEnable(qrcodeUrl);
           } else if (is2FAEnabled === true) {
             console.log("disable 2fa");

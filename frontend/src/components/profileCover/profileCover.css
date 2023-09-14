@@ -13,6 +13,11 @@
     gap: 1.5rem;
     min-height: 200px;
 }
+
+.setting-icon{
+    height: 30px !important;
+    cursor: pointer;
+}
 /* style for desktop  */
 @media screen and (min-width:1000px) {
     .profileCover img {
