@@ -1,11 +1,24 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import "./userEditForm.css";
 interface UserEditFormProps {
   showModal: boolean;
   setShowModal: (showModal: boolean) => void;
 }
 const UserEditForm = ({ showModal, setShowModal }: UserEditFormProps) => {
+  const [image, setImage] = useState<string>('/assets/logo.png');
+  const handleAvaUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <>
       <button
@@ -23,8 +36,21 @@ const UserEditForm = ({ showModal, setShowModal }: UserEditFormProps) => {
               X
             </span>
             <div className="flex flex-col gap-2 p-8">
+            <img
+            alt="profil"
+            src={image}
+            className="mx-auto mb-7 object-cover rounded-full h-20 w-20 px-6 py-3   border-2 border-white dark:border-gray-800"
+          />
               <input
-                className="bg-slate-900 w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800"
+                className="mb-4 block w-full text-sm borderrounded-lg cursor-pointer  focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                aria-describedby="file_input_help"
+                id="file_input"
+                type="file"
+                onChange={(e)=>handleAvaUpload(e)}
+              />
+             
+              <input
+                className="mb-4 bg-slate-900 w-full rounded-lg border border-gray-300 px-6 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800"
                 placeholder="Username"
               />
               <label className="flex cursor-pointer items-center justify-between p-1 text-slate-400">
