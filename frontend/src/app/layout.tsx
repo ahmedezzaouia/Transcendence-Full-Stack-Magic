@@ -1,11 +1,11 @@
 import React from "react";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 
 import StyledComponentsRegistry from "./antdRegistry";
 import "@/app/globals.css";
 import { AsideBar, NavBar } from "@/components";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({subsets:["latin"] ,variable: '--font-poppins', weight: ["400", '700'] });
 
 export const metadata = {
   title: "Create Next App",
@@ -26,7 +26,7 @@ const CustomLayout = ({ children }: { children: React.ReactNode }) => {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang="en">
-    <body className={inter.className}>
+    <body className={poppins.className}>
       <CustomLayout>
         <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </CustomLayout>

@@ -32,8 +32,8 @@ export default function Profile() {
     }
   }, [user]);
 
-  if (error) return <div>User not found or failed to load user data</div>;
-  if (!user) return <div>Loading user data...</div>;
+  // if (error) return <div>User not found or failed to load user data</div>;
+  // if (!user) return <div>Loading user data...</div>;
   return (
     <>
       {formStats.showForm ? (

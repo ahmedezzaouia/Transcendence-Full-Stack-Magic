@@ -9,7 +9,10 @@
     -webkit-box-shadow: -2px 5px 19px 0px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: -2px 5px 19px 0px rgba(0, 0, 0, 0.75);
 }
-
+.profile-items{
+    gap: 1.5rem;
+    min-height: 200px;
+}
 /* style for desktop  */
 @media screen and (min-width:1000px) {
     .profileCover img {
@@ -18,7 +21,6 @@
 
     .profile-items {
         flex-direction: row !important;
-        gap: 1rem;
         flex-direction: row;
 
     }
@@ -28,6 +30,7 @@
         width: 21%;
         text-align: center;
         color: white;
+       
     }
 
 
@@ -74,4 +77,13 @@
 
 .add-friend-btn {
     background-color: #ED4C5C;
+}
+
+.profile-items .profile-avatar img {
+    height: 100px;
+    width: 100px;
+   
+}
+.profileCover img {
+    height: 12rem;
 }
