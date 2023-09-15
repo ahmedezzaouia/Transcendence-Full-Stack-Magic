@@ -22,7 +22,6 @@ export default function Twofactors() {
   }
 
   return (
-    <main>
       <div className="form-container">
         <Form2fa
           submitForm={verifyTokenSubmission}
@@ -30,6 +29,5 @@ export default function Twofactors() {
           setIsError={formStats.setIsFromError}
         />
       </div>
-    </main>
   );
 }
