@@ -8,6 +8,7 @@ import { use2FAFormAuth } from "@/hooks";
 import { use2FASwitch } from "@/hooks";
 import useSWR from "swr";
 import { Achievements, GameHistory, ProfileCover } from "@/components";
+import "flowbite"
 
 export default function Profile() {
   const params = useParams();
