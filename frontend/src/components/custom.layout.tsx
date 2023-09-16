@@ -5,16 +5,17 @@ import { useEffect } from "react";
 
 const CustomLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
-  const excludePaths = ["/twofactors", "/"];
+  const excludelayoutPaths = ["/twofactors", "/"];
   
-  useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
-    if (accessToken !== null && pathname === "/") {
+    if (accessToken === null && pathname !== "/" && pathname !== "/twofactors") {
+      window.location.href = "/";
+    }
+    else if (accessToken !== null && pathname === "/") {
       window.location.href = "dashboard";
     }
-  }, []);
-
-  return excludePaths.includes(pathname) ? (
+    
+  return excludelayoutPaths.includes(pathname) ? (
     <div>{children}</div>
   ) : (
     <>
