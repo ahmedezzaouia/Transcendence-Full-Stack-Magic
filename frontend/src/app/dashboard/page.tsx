@@ -22,11 +22,7 @@ export default function Dashboard() {
     }
   }, []);
 
-  useEffect(() => {
-      // fetch  user data and set it to store
-  
-      fetchMe()
-  },[]);
+
 
   if (userId && isfirstLogin === "true") {
     return <div>Redirecting...</div>;

@@ -1,8 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./userEditForm.css";
 import { use2FAFormAuth, use2FASwitch } from "@/hooks";
 import Form2fa from "../form2fa/form2fa";
+import { useUserStore } from "@/store";
+
 
 const UserEditForm = () => {
   const { formStats, verifyTokenSubmission } = use2FAFormAuth({
@@ -15,8 +17,9 @@ const UserEditForm = () => {
       formStats.setQrcode(qrcodeUrl);
     },
   });
+  const user: any = useUserStore((state) => state.user);
 
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState('');
 
   const handleAvaUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -29,6 +32,12 @@ const UserEditForm = () => {
       reader.readAsDataURL(file);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      setImage(user.avatarUrl)
+    }
+  } , [user]);
 
   return (
     <div className="userModal pt-5 rounded-2xl bg-slate-900">

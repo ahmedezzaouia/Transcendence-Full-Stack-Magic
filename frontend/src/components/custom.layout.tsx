@@ -2,6 +2,7 @@
 import { usePathname } from "next/navigation";
 import { AsideBar, NavBar } from ".";
 import { use, useEffect } from "react";
+import { fetchMe } from "@/services";
 
 const CustomLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -15,6 +16,11 @@ const CustomLayout = ({ children }: { children: React.ReactNode }) => {
       window.location.href = "dashboard";
     }
   }, []);
+
+  useEffect(() => {
+    // fetch user data and set it to store
+    fetchMe()
+},[]);
 
   return excludelayoutPaths.includes(pathname) ? (
     <div>{children}</div>

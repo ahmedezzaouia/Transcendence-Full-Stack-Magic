@@ -6,6 +6,15 @@ import { AuthJwtGuard } from 'src/auth/guards/jwt.guard';
 export class UserController {
   constructor(private userServices: UserService) {}
 
+  @UseGuards(AuthJwtGuard)
+  @Get("me")
+  async getMe(@Req() req) {
+    console.log("🚀 ~ file: user.controller.ts:41 ~ UserController ~ getMe ~ req.user:", req.user)
+    return req.user;
+  }
+
+
+
  @Post('verify2f-login')
   async verify2fLogin(@Req() req) {
     return this.userServices.verify2fLogin(req.body.id, req.body.token);
@@ -35,11 +44,5 @@ export class UserController {
     return this.userServices.verify2fa(req.user, req.body.token);
   }
 
-  @UseGuards(AuthJwtGuard)
-  @Get("ahmed")
-  async getMe(@Req() req) {
-    console.log("🚀 ~ file: user.controller.ts:41 ~ UserController ~ getMe ~ req.user:", req.user)
-    return req.user;
-  }
-
+ 
 }
