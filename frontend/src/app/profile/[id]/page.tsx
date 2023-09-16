@@ -37,15 +37,15 @@ export default function Profile() {
   if (!user) return <Loading />;
   return showModal ? (
     <UserEditForm
-      showModal={showModal}
-      setShowModal={setShowModal}
-      defaultImage={user.avatarUrl}
-      is2FAEnabled={is2FAEnabled}
-      toggle2faSwitch={toggle2faSwitch}
+      // showModal={showModal}
+      // setShowModal={setShowModal}
+      // defaultImage={user.avatarUrl}
+      // is2FAEnabled={is2FAEnabled}
+      // toggle2faSwitch={toggle2faSwitch}
     />
   ) : (
     <>
-      {formStats.showForm ? (
+      {/* {formStats.showForm ? (
         <div className="form-container">
           <Form2fa
             qrcodeUrl={formStats.qrcode}
@@ -55,7 +55,7 @@ export default function Profile() {
             setIsError={formStats.setIsFromError}
           />
         </div>
-      ) : null}
+      ) : null} */}
       {/* <h1>Profile page</h1>
       <h2>hello : {user.username}</h2>
       <label className="switch">

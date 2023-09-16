@@ -34,6 +34,6 @@ export class UserController {
   async verify2fa(@Req() req) {
     return this.userServices.verify2fa(req.user, req.body.token);
   }
-
+  
 
 }
