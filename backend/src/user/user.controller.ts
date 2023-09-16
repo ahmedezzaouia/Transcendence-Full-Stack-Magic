@@ -1,4 +1,4 @@
-import {Controller, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
+import {Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthJwtGuard } from 'src/auth/guards/jwt.guard';
 
@@ -34,6 +34,12 @@ export class UserController {
   async verify2fa(@Req() req) {
     return this.userServices.verify2fa(req.user, req.body.token);
   }
-  
+
+  @UseGuards(AuthJwtGuard)
+  @Get("ahmed")
+  async getMe(@Req() req) {
+    console.log("🚀 ~ file: user.controller.ts:41 ~ UserController ~ getMe ~ req.user:", req.user)
+    return req.user;
+  }
 
 }

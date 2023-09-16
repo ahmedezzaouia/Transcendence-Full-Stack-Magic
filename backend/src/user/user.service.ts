@@ -6,7 +6,6 @@ import { toDataURL } from 'qrcode';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
-
 @Injectable()
 export class UserService {
   constructor(
@@ -123,6 +122,27 @@ export class UserService {
       return { isValid, accessToken };
     } catch (error) {
       throw new Error('Failed to verify 2fa for user in first login');
+    }
+  }
+
+  async getMe(id: string): Promise<User> {
+    console.log("getMe id :: ", id, " ::")
+    let user: User;
+    try {
+      user = await this.prisma.user.findUnique({
+        where: { id },
+      });
+      if (!user) throw new Error('User not found');
+      delete user.twoFactorsSecret;
+      return user;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error.message,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }

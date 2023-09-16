@@ -1,23 +1,36 @@
-import { create } from 'zustand'
+import { fetchMe } from '@/services';
+import {create} from 'zustand';
 
-// type State = {
-//   count: number
-// }
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  isTwofactorsEnabled: boolean;
+  avatarUrl: string;
+  status: UserStatus;
+}
 
-// type Actions = {
-//   increment: (qty: number) => void
-//   decrement: (qty: number) => void
-// }
+type UserStatus = 'ONLINE' | 'OFFLINE';
 
-// const useCountStore = create<State & Actions>((set) => ({
-//   count: 0,
-//   increment: (qty: number) => set((state) => ({ count: state.count + qty })),
-//   decrement: (qty: number) => set((state) => ({ count: state.count - qty })),
-// }))
+interface UserStore {
+  user: User | null;
+  setUser: (user: User) => void;
+  fetchMe: () => Promise<void>;
+}
 
+const useUserStore = create<UserStore>((set) => ({
+  user: null,
+  setUser: (user) => set({ user }),
+  fetchMe: async () => {
+    try {
+      
+      console.log("🚀 ~ file: userStore.ts:28 ~ fetchMe: ",)
+      const user = await fetchMe();
+      set({ user: user });
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    }
+  },
+}));
 
-
-// // use zustand for userStore
-
-
-export const useUserStore = create((set) => ({}))
+export default useUserStore;

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { UserEditForm } from "@/components";
+import { useUserStore } from "@/store";
 
 export default function Dashboard() {
   const searchParams = useSearchParams();
@@ -9,6 +9,8 @@ export default function Dashboard() {
   const userId = searchParams.get("id");
   const accessToken = searchParams.get("accesstoken");
   const isfirstLogin = searchParams.get("firstlogin");
+
+  const fetchMe = useUserStore((state) => state.fetchMe);
 
   useEffect(() => {
     if (accessToken) {
@@ -19,6 +21,12 @@ export default function Dashboard() {
       window.location.href = `/profile/${userId}`;
     }
   }, []);
+
+  useEffect(() => {
+      // fetch  user data and set it to store
+  
+      fetchMe()
+  },[]);
 
   if (userId && isfirstLogin === "true") {
     return <div>Redirecting...</div>;

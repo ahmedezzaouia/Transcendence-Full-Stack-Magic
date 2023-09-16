@@ -1,20 +1,21 @@
 "use client";
 import { usePathname } from "next/navigation";
 import { AsideBar, NavBar } from ".";
-import { useEffect } from "react";
+import { use, useEffect } from "react";
 
 const CustomLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const excludelayoutPaths = ["/twofactors", "/"];
-  
+
+  useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken === null && pathname !== "/" && pathname !== "/twofactors") {
       window.location.href = "/";
-    }
-    else if (accessToken !== null && pathname === "/") {
+    } else if (accessToken !== null && pathname === "/") {
       window.location.href = "dashboard";
     }
-    
+  }, []);
+
   return excludelayoutPaths.includes(pathname) ? (
     <div>{children}</div>
   ) : (
