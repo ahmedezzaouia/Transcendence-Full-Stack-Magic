@@ -1,27 +1,30 @@
 "use client";
 import { usePathname } from "next/navigation";
 import { AsideBar, NavBar } from ".";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 import { fetchMe } from "@/services";
+import { useUserStore } from "@/store";
 
 const CustomLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const excludelayoutPaths = ["/twofactors", "/"];
+  const fetchMe = useUserStore((state) => state.fetchMe);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken === null && pathname !== "/" && pathname !== "/twofactors") {
       window.location.href = "/";
     } else if (accessToken !== null && pathname === "/") {
+     
       window.location.href = "dashboard";
     }
   }, []);
 
   useEffect(() => {
-    // fetch user data and set it to store
-    fetchMe()
-},[]);
+    fetchMe();
+  }, []);
 
+  
   return excludelayoutPaths.includes(pathname) ? (
     <div>{children}</div>
   ) : (

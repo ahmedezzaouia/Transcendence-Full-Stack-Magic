@@ -4,6 +4,7 @@ import "./userEditForm.css";
 import { use2FAFormAuth, use2FASwitch } from "@/hooks";
 import Form2fa from "../form2fa/form2fa";
 import { useUserStore } from "@/store";
+import { User } from "@/types";
 
 
 const UserEditForm = () => {
@@ -17,7 +18,7 @@ const UserEditForm = () => {
       formStats.setQrcode(qrcodeUrl);
     },
   });
-  const user: any = useUserStore((state) => state.user);
+  const user: User | null = useUserStore((state) => state.user);
 
   const [image, setImage] = useState('');
 

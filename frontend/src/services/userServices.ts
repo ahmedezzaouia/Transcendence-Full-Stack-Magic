@@ -26,7 +26,6 @@ export const fetchUser = async (url: string) => {
 export const fetchMe = async () => {
   try {
     const accessToken = localStorage.getItem('accessToken');
-    console.log("🚀 ~ file: userServices.ts:29 ~ fetchMe ~ accessToken:", accessToken)
     const response = await fetch('http://localhost:3001/user/me', {
       method: 'GET',
       headers: {
@@ -47,6 +46,6 @@ export const fetchMe = async () => {
 
     return user;
   } catch (error) {
-    throw new Error('Unexpected error while fetching user');
+    throw new Error('Unexpected error while fetching me');
   }
 };

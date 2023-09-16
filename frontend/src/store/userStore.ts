@@ -1,17 +1,9 @@
 import { fetchMe } from '@/services';
 import {create} from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { User } from '@/types';
 
-interface User {
-  id: string;
-  username: string;
-  email: string;
-  isTwofactorsEnabled: boolean;
-  avatarUrl: string;
-  status: UserStatus;
-}
 
-type UserStatus = 'ONLINE' | 'OFFLINE';
 
 interface UserStore {
   user: User | null;
@@ -25,7 +17,6 @@ const useUserStore = create<UserStore>(
     setUser: (user) => set({ user }),
     fetchMe: async () => {
       try {
-        console.log("🚀 ~ file: userStore.ts:28 ~ fetchMe: ");
         const newUser = await fetchMe();
         set({ user: newUser });
       } catch (error) {

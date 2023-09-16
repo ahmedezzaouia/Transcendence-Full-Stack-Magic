@@ -10,19 +10,19 @@ export default function Dashboard() {
   const accessToken = searchParams.get("accesstoken");
   const isfirstLogin = searchParams.get("firstlogin");
 
-  const fetchMe = useUserStore((state) => state.fetchMe);
+  // const fetchMe = useUserStore((state) => state.fetchMe);
 
   useEffect(() => {
     if (accessToken) {
       localStorage.setItem("accessToken", accessToken);
-
-    }
-    else if (userId && isfirstLogin === "true") {
+    } else if (userId && isfirstLogin === "true") {
       window.location.href = `/profile/${userId}`;
     }
   }, []);
 
-
+  // useEffect(() => {
+  //   fetchMe();
+  // }, []);
 
   if (userId && isfirstLogin === "true") {
     return <div>Redirecting...</div>;
@@ -33,6 +33,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-
-
