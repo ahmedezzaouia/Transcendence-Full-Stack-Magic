@@ -1,13 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import "./userEditForm.css";
 import { use2FAFormAuth, use2FASwitch } from "@/hooks";
 import Form2fa from "../form2fa/form2fa";
 import { useUserStore } from "@/store";
 import { User } from "@/types";
 
-
 const UserEditForm = () => {
+  const user: User | null = useUserStore((state) => state.user);
+
+  const [image, setImage] = useState("");
+  const [username, setUsername] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
   const { formStats, verifyTokenSubmission } = use2FAFormAuth({
     onVerifyUserSuccess: () => setIs2FAEnabled(true),
   });
@@ -18,9 +23,6 @@ const UserEditForm = () => {
       formStats.setQrcode(qrcodeUrl);
     },
   });
-  const user: User | null = useUserStore((state) => state.user);
-
-  const [image, setImage] = useState('');
 
   const handleAvaUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -36,10 +38,15 @@ const UserEditForm = () => {
 
   useEffect(() => {
     if (user) {
-      setImage(user.avatarUrl)
+      setImage(user.avatarUrl);
+      setUsername(user.username);
     }
-  } , [user]);
+  }, [user]);
 
+  const updateUser = () => {
+    console.log("update user");
+    //TODO: update user with username and avatarImage
+  };
   return (
     <div className="userModal pt-5 rounded-2xl bg-slate-900">
       <div className="flex flex-col gap-2 p-8">
@@ -59,6 +66,8 @@ const UserEditForm = () => {
         <input
           className="mb-4 bg-slate-900 w-full rounded-lg border border-gray-300 px-6 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800"
           placeholder="Username"
+          onChange={(e) => setUsername(e.target.value)}
+          value={username}
         />
         <label className="flex cursor-pointer items-center justify-between p-1 text-slate-400">
           Enable 2FA
@@ -73,9 +82,14 @@ const UserEditForm = () => {
           </div>
         </label>
 
-        <button className="inline-block cursor-pointer rounded-md bg-gray-700 px-4 py-3.5 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-700 focus-visible:ring-offset-2 active:scale-95">
+        <button
+          onClick={updateUser}
+          className="inline-block cursor-pointer rounded-md bg-gray-700 px-4 py-3.5 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-700 focus-visible:ring-offset-2 active:scale-95"
+        >
           Save
         </button>
+
+        {errorMessage ? <button style={{color:"red"}}>Error: {errorMessage}</button> : null}
       </div>
 
       {formStats.showForm ? (
