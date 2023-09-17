@@ -10,6 +10,8 @@ export default function Dashboard() {
   const accessToken = searchParams.get("accesstoken");
   const isfirstLogin = searchParams.get("firstlogin");
 
+  const fetchCurrentUser = useUserStore((state) => state.fetchMe);
+
 
   useEffect(() => {
     if (accessToken) {
@@ -20,6 +22,12 @@ export default function Dashboard() {
     }
   }, []);
 
+   useEffect(() => {
+    console.log("useffect navbar render....");
+    if (user) {
+      fetchCurrentUser();
+    }
+  }, []);
 
   if (userId && isfirstLogin === "true") {
     return <div>Redirecting...</div>;

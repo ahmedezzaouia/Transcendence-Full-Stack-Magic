@@ -5,18 +5,18 @@ import { useUserStore } from "@/store";
 import { User } from "@/types";
 
 const NavBar = () => {
-  const fetchCurrentUser = useUserStore((state) => state.fetchMe);
+  // const fetchCurrentUser = useUserStore((state) => state.fetchMe);
   const user: User = useUserStore((state) => state.user);
   const defaultAvatar = "https://p.kindpng.com/picc/s/421-4212356_user-white-icon-png-transparent-png.png";
-  const [avatar, setAvatar] = React.useState<string>(defaultAvatar);
+  // const [avatar, setAvatar] = React.useState<string>(user ? user.avatarUrl: defaultAvatar);
 
-  useEffect(() => {
-    console.log("useffect navbar render....");
-    if (user) {
-      fetchCurrentUser();
-      setAvatar(user.avatarUrl);
-    }
-  }, []);
+  // useEffect(() => {
+  //   console.log("useffect navbar render....");
+  //   if (user) {
+  //     fetchCurrentUser();
+  //     setAvatar(user.avatarUrl);
+  //   }
+  // }, []);
 
   return (
     <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -88,7 +88,7 @@ const NavBar = () => {
                   data-dropdown-toggle="dropdown-user"
                 >
                   <span className="sr-only">Open user menu</span>
-                  <img className="w-8 h-8 rounded-full" src={avatar} alt="user photo" />
+                  <img className="w-8 h-8 rounded-full" src={user ? user.avatarUrl: defaultAvatar} alt="user photo" />
                 </button>
               </div>
               <div
