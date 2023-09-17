@@ -5,7 +5,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { toDataURL } from 'qrcode';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { UpdateUserDto } from './dto/user.dto';
 
 @Injectable()
 export class UserService {
@@ -147,10 +146,10 @@ export class UserService {
     }
   }
 
-  async updateUser({ username, avatarUrl }): Promise<User> {
+  async updateUser({ username, avatarUrl}, user:User): Promise<User> {
     try {
       const userUpdate = await this.prisma.user.update({
-        where: { username: username },
+        where: { username: user.username },
         data: {
           username: username,
           avatarUrl: avatarUrl,
@@ -163,8 +162,6 @@ export class UserService {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
           errorMessage = 'The username is already taken.';
-        } else {
-          errorMessage = 'Could not update the user due to a database error.';
         }
       } else if (error instanceof Prisma.PrismaClientValidationError) {
         errorMessage = 'Invalid data provided for user update.';

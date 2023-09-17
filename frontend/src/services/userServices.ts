@@ -52,8 +52,6 @@ export const fetchMe = async () => {
 
 
 
-
-
 export const updateUser = async (updatedUser: {username:string, avatarUrl: string}) => {
   try {
     const accessToken = localStorage.getItem('accessToken');
@@ -68,7 +66,7 @@ export const updateUser = async (updatedUser: {username:string, avatarUrl: strin
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(`Failed to update user: ${errorData.message || 'Response not OK'}`);
+      throw new Error(`${errorData.error}`);
     }
 
     const user = await response.json();
@@ -78,6 +76,6 @@ export const updateUser = async (updatedUser: {username:string, avatarUrl: strin
 
     return user;
   } catch (error) {
-    throw new Error('Unexpected error while updating user');
+    throw error;
   }
 }

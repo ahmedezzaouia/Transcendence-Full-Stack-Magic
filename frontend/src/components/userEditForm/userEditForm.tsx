@@ -45,16 +45,22 @@ const UserEditForm = () => {
   }, [user]);
 
   const handleUseUpdate = async () => {
-    if (username && image) {
+    if (username && image && (user?.username !== username || user?.avatarUrl !== image)) {
       try {
-        const user = await updateUser({ username, avatarUrl: image });
-        console.log("updateUser:", user);
+        const updatedUser = await updateUser({ username, avatarUrl: image });
+        console.log("updateUser:", updatedUser);
+        if (updatedUser){
+          window.location.href  = "/profile/" + updatedUser.id;
+        }
       } catch (error: any) {
         console.log(error);
         setErrorMessage(error.message);
       }
     }
-  };
+  }
+
+
+
   return (
     <div className="userModal pt-5 rounded-2xl bg-slate-900">
       <div className="flex flex-col gap-2 p-8">
