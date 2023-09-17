@@ -1,9 +1,7 @@
 import { fetchMe } from '@/services';
 import {create} from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 import { User } from '@/types';
-
-
 
 interface UserStore {
   user: User | null;
@@ -12,18 +10,20 @@ interface UserStore {
 }
 
 const useUserStore = create<UserStore>(
-  devtools((set) => ({
-    user: null,
-    setUser: (user) => set({ user }),
-    fetchMe: async () => {
-      try {
-        const newUser = await fetchMe();
-        set({ user: newUser });
-      } catch (error) {
-        console.error('Error fetching user:', error);
-      }
-    },
-  }))
+  
+    devtools((set) => ({
+      user: null,
+      setUser: (user) => set({ user }),
+      fetchMe: async () => {
+        try {
+          const newUser = await fetchMe();
+          set({ user: newUser });
+        } catch (error) {
+          console.error('Error fetching user:', error);
+        }
+      },
+    })),
+  
 );
 
 export default useUserStore;

@@ -10,7 +10,7 @@ export default function Dashboard() {
   const accessToken = searchParams.get("accesstoken");
   const isfirstLogin = searchParams.get("firstlogin");
 
-  // const fetchMe = useUserStore((state) => state.fetchMe);
+  const fetchMe = useUserStore((state) => state.fetchMe);
 
   useEffect(() => {
     if (accessToken) {
@@ -20,9 +20,9 @@ export default function Dashboard() {
     }
   }, []);
 
-  // useEffect(() => {
-  //   fetchMe();
-  // }, []);
+  useEffect(() => {
+    fetchMe();
+  }, []);
 
   if (userId && isfirstLogin === "true") {
     return <div>Redirecting...</div>;

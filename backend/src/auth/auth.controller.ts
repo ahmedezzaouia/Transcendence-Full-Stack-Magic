@@ -8,6 +8,7 @@ export class AuthController {
 
   @Get('login')
   async login(@Res() res) {
+    console.log("🚀 ~ file: auth.controller.ts:11 ~ AuthController ~ login ")
     return this.authServices.login(res);
   }
 
