@@ -2,13 +2,11 @@
 import { usePathname } from "next/navigation";
 import { AsideBar, NavBar } from ".";
 import { useEffect } from "react";
-import { fetchMe } from "@/services";
 import { useUserStore } from "@/store";
 
 const CustomLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
   const excludelayoutPaths = ["/twofactors", "/"];
-  // const fetchMe = useUserStore((state) => state.fetchMe);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -20,11 +18,7 @@ const CustomLayout = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   fetchMe();
-  // }, []);
 
-  
   return excludelayoutPaths.includes(pathname) ? (
     <div>{children}</div>
   ) : (

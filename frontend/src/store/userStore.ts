@@ -10,7 +10,6 @@ interface UserStore {
 }
 
 const useUserStore = create<UserStore>(
-  
     devtools((set) => ({
       user: null,
       setUser: (user) => set({ user }),

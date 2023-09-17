@@ -15,7 +15,8 @@ export default function Dashboard() {
   useEffect(() => {
     if (accessToken) {
       localStorage.setItem("accessToken", accessToken);
-    } else if (userId && isfirstLogin === "true") {
+    }
+    if (userId && isfirstLogin === "true") {
       window.location.href = `/profile/${userId}`;
     }
   }, []);
