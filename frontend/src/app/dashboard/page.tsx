@@ -24,9 +24,7 @@ export default function Dashboard() {
 
    useEffect(() => {
     console.log("useffect navbar render....");
-    if (user) {
       fetchCurrentUser();
-    }
   }, []);
 
   if (userId && isfirstLogin === "true") {
