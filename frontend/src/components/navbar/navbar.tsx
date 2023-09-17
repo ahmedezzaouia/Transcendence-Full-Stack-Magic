@@ -1,7 +1,21 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import "./navbar.css";
+import { useUserStore } from "@/store";
+import { User } from "@/types";
 
 const NavBar = () => {
+  const fetchCurrentUser = useUserStore(state =>state.fetchMe)
+  const user:User = useUserStore(state => state.user)
+  const defaultAvatar = "https://p.kindpng.com/picc/s/421-4212356_user-white-icon-png-transparent-png.png"
+  const [avatar , setAvatar] = React.useState<string>(defaultAvatar)
+
+  useEffect(() => {
+    console.log("useffect navbar render....");
+    fetchCurrentUser();
+    user && setAvatar(user.avatarUrl)
+  }, [user]);
+
   return (
     <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
       <div className="px-3 py-3 lg:px-5 lg:pl-3">
@@ -74,7 +88,7 @@ const NavBar = () => {
                   <span className="sr-only">Open user menu</span>
                   <img
                     className="w-8 h-8 rounded-full"
-                    src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                    src={avatar}
                     alt="user photo"
                   />
                 </button>

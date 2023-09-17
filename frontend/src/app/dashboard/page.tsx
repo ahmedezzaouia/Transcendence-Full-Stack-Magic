@@ -21,7 +21,6 @@ export default function Dashboard() {
   }, []);
 
 
-
   if (userId && isfirstLogin === "true") {
     return <div>Redirecting...</div>;
   }

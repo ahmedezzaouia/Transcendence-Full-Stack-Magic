@@ -9,23 +9,13 @@ interface Use2faSwitchProps {
 
 export const use2FASwitch = ({ onEnable }: Use2faSwitchProps) => {
   const [is2FAEnabled, setIs2FAEnabled] = useState(false);
-    const user:User | null = useUserStore(stat =>stat.user)
-    const fetchCurrentUser = useUserStore(stat =>stat.fetchMe)
+  const user: User | null = useUserStore((state) => state.user);
 
-
-  useEffect(
-    ()=>{
-
-      if (user)
-      {
-        setIs2FAEnabled(user.isTwofactorsEnabled)
-        console.log("🚀 ~ file: use2FaSwitch.ts:22 ~ use2FASwitch ~ user.isTwofactorsEnabled:", user.isTwofactorsEnabled)
-      }
-      else {
-        fetchCurrentUser()
-      }
-
-    },[user])
+  useEffect(() => {
+    if (user) {
+      setIs2FAEnabled(user.isTwofactorsEnabled);
+    }
+  }, [user]);
   const handle2FAToggle = async () => {
     try {
       if (is2FAEnabled === false) {
