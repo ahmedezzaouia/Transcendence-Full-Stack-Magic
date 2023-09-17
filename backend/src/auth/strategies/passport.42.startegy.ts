@@ -29,6 +29,7 @@ export class Passport42Strategy extends PassportStrategy(Strategy, '42') {
   ): Promise<any> {
     let token: string
     try {
+      // console.log(profile._json.image.link);
       const { username, emails } = profile;
       let firstLogin = false;
       let user = await this.prisma.user.findUnique({
@@ -42,6 +43,7 @@ export class Passport42Strategy extends PassportStrategy(Strategy, '42') {
           data: {
             username,
             email: emails[0].value,
+            avatarUrl: profile._json.image.link,
           },
         });
         firstLogin = true

@@ -4,3 +4,7 @@ export {default as GameHistory} from './gameHistory/gameHistory';
 export { default as Achievements } from './achievements/achievements';
 export { default as NavBar } from './navbar/navbar';
 export { default as AsideBar } from './asidebar/asidebar';
+export { default as Loading } from './loading/loading';
+export { default as UserEditForm } from './userEditForm/userEditForm';
+
+export { default as CustomLayout } from './custom.layout';

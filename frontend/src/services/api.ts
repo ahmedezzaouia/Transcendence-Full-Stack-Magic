@@ -1,35 +1,23 @@
-
 import axios from 'axios';
 
-const api = axios.create({
-  baseURL: 'http://localhost:3001',
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${localStorage.getItem("acessToken")}`, 
-  },
-});
+const getApiInstance = () => {
+  const api = axios.create({
+    baseURL: 'http://localhost:3001',
+  
+  });
 
+  // Add an interceptor to update headers before each request
+  api.interceptors.request.use((config) => {
+    const updatedAccessToken = localStorage.getItem('accessToken');
+    if (updatedAccessToken) {
+      config.headers.Authorization = `Bearer ${updatedAccessToken}`;
+    }
+    return config;
+  });
 
+  return api;
+};
 
+const api = getApiInstance();
 
-
-// // Define your API functions
-// const fetchData = async () => {
-//   try {
-//     const response = await api.get('/endpoint');
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// const postData = async () => {
-//   try {
-//     const response = await api.post('/post-endpoint', data);
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// export { fetchData, postData };
+export default api;

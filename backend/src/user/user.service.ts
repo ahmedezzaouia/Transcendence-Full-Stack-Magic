@@ -1,11 +1,10 @@
 import { HttpException, HttpStatus, Injectable, Req } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { authenticator } from 'otplib';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { toDataURL } from 'qrcode';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-
 
 @Injectable()
 export class UserService {
@@ -123,6 +122,58 @@ export class UserService {
       return { isValid, accessToken };
     } catch (error) {
       throw new Error('Failed to verify 2fa for user in first login');
+    }
+  }
+
+  async getMe(id: string): Promise<User> {
+    console.log('getMe id :: ', id, ' ::');
+    let user: User;
+    try {
+      user = await this.prisma.user.findUnique({
+        where: { id },
+      });
+      if (!user) throw new Error('User not found');
+      delete user.twoFactorsSecret;
+      return user;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error.message,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  async updateUser({ username, avatarUrl}, user:User): Promise<User> {
+    try {
+      const userUpdate = await this.prisma.user.update({
+        where: { username: user.username },
+        data: {
+          username: username,
+          avatarUrl: avatarUrl,
+        },
+      });
+      return userUpdate;
+    } catch (error) {
+      let errorMessage = 'An error occurred while updating the user.';
+  
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          errorMessage = 'The username is already taken.';
+        }
+      } else if (error instanceof Prisma.PrismaClientValidationError) {
+        errorMessage = 'Invalid data provided for user update.';
+      }
+  
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: errorMessage,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }

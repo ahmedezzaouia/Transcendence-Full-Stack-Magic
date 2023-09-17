@@ -10,11 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+enum UserStatus {
+  ONLINE
+  OFFLINE
+  IN_GAME
+}
+
+
 model User {
   id                  String  @id @default(uuid())
   username            String  @unique
   email               String  @unique
   isTwofactorsEnabled Boolean @default(false)
   twoFactorsSecret    String?
-  avatarUrl           String?
+  avatarUrl           String
+  status              UserStatus @default(OFFLINE)
 }
