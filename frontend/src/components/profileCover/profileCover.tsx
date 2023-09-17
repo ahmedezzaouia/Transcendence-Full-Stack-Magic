@@ -4,12 +4,10 @@ import "./profileCover.css";
 import Image from "next/image";
 
 interface ProfileCoverProps {
-
   user: any;
-  setShowModal: (showModal: boolean) => void;
 }
 
-const ProfileCover = ({ user, setShowModal }: ProfileCoverProps) => {
+const ProfileCover = ({ user }: ProfileCoverProps) => {
   return (
     <section className="profileCover shadow-lg rounded-2xl w-100">
       <img
@@ -26,7 +24,6 @@ const ProfileCover = ({ user, setShowModal }: ProfileCoverProps) => {
               className="mx-auto object-cover rounded-full h-16 w-16  border-2 border-white dark:border-gray-800"
             />
           </a>
-          <Image className="setting-icon"src="/assets/setting-icon.svg" alt="" width={10} height={10}  onClick={()=>setShowModal(true)}/>
           <p className="mt-2 text-xl font-medium text-gray-800 dark:text-white">{user.username}</p>
         </div>
 
