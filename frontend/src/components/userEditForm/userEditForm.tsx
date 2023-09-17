@@ -5,13 +5,14 @@ import { use2FAFormAuth, use2FASwitch } from "@/hooks";
 import Form2fa from "../form2fa/form2fa";
 import { useUserStore } from "@/store";
 import { User } from "@/types";
+import { updateUser } from "@/services";
 
 const UserEditForm = () => {
   const user: User | null = useUserStore((state) => state.user);
 
   const [image, setImage] = useState("");
   const [username, setUsername] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const { formStats, verifyTokenSubmission } = use2FAFormAuth({
     onVerifyUserSuccess: () => setIs2FAEnabled(true),
@@ -43,9 +44,16 @@ const UserEditForm = () => {
     }
   }, [user]);
 
-  const updateUser = () => {
-    console.log("update user");
-    //TODO: update user with username and avatarImage
+  const handleUseUpdate = async () => {
+    if (username && image) {
+      try {
+        const user = await updateUser({ username, avatarUrl: image });
+        console.log("updateUser:", user);
+      } catch (error: any) {
+        console.log(error);
+        setErrorMessage(error.message);
+      }
+    }
   };
   return (
     <div className="userModal pt-5 rounded-2xl bg-slate-900">
@@ -66,7 +74,10 @@ const UserEditForm = () => {
         <input
           className="mb-4 bg-slate-900 w-full rounded-lg border border-gray-300 px-6 py-3 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:ring-offset-2 focus:ring-offset-gray-800"
           placeholder="Username"
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => {
+            setErrorMessage("");
+            setUsername(e.target.value);
+          }}
           value={username}
         />
         <label className="flex cursor-pointer items-center justify-between p-1 text-slate-400">
@@ -83,13 +94,13 @@ const UserEditForm = () => {
         </label>
 
         <button
-          onClick={updateUser}
+          onClick={handleUseUpdate}
           className="inline-block cursor-pointer rounded-md bg-gray-700 px-4 py-3.5 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-700 focus-visible:ring-offset-2 active:scale-95"
         >
           Save
         </button>
 
-        {errorMessage ? <button style={{color:"red"}}>Error: {errorMessage}</button> : null}
+        {errorMessage ? <button style={{ color: "red" }}>Error: {errorMessage}</button> : null}
       </div>
 
       {formStats.showForm ? (
