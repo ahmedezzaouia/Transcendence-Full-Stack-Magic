@@ -8,6 +8,8 @@ import { BsChatRightDots } from "react-icons/bs";
 import { RiUserSettingsFill } from "react-icons/ri";
 import { IoGameController } from "react-icons/io5";
 import Link from "next/link";
+import { useUserStore } from "@/store";
+import { User } from "@/types";
 
 const AsideBar = () => {
   const handleLogoutClick = () => {
@@ -15,6 +17,7 @@ const AsideBar = () => {
     localStorage.removeItem("accessToken");
   };
   
+  const user: User | null = useUserStore((state) => state.user);
   return (
     <aside
       id="logo-sidebar"
@@ -37,7 +40,7 @@ const AsideBar = () => {
           </li>
           <li>
             <Link
-              href="/profile"
+              href={`/profile/${user?.id}`}
               className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
             >
               <ImProfile />
