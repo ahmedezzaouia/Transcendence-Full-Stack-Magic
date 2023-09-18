@@ -1,23 +1,18 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./navbar.css";
 import { useUserStore } from "@/store";
 import { User } from "@/types";
+import Image from "next/image";
+import "flowbite"
 
 const NavBar = () => {
-  // const fetchCurrentUser = useUserStore((state) => state.fetchMe);
   const user: User | null = useUserStore((state) => state.user);
-  const defaultAvatar = "https://p.kindpng.com/picc/s/421-4212356_user-white-icon-png-transparent-png.png";
-  // const [avatar, setAvatar] = React.useState<string>(user ? user.avatarUrl: defaultAvatar);
-
-  // useEffect(() => {
-  //   console.log("useffect navbar render....");
-  //   if (user) {
-  //     fetchCurrentUser();
-  //     setAvatar(user.avatarUrl);
-  //   }
-  // }, []);
-
+  const [image, setImage] = useState<string>("");
+  useEffect(() => {
+    console.log("useEffect in navbar render...");
+    user && setImage(user.avatarUrl);
+  }, [user]);
   return (
     <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
       <div className="px-3 py-3 lg:px-5 lg:pl-3">
@@ -26,12 +21,16 @@ const NavBar = () => {
             <button
               data-drawer-target="logo-sidebar"
               data-drawer-toggle="logo-sidebar"
-              aria-controls="logo-sidebar"
               type="button"
               className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             >
               <span className="sr-only">Open sidebar</span>
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                className="w-6 h-6"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <path
                   clipRule="evenodd"
                   fillRule="evenodd"
@@ -43,7 +42,9 @@ const NavBar = () => {
 
           <div className="nav-searchForm flex items-center">
             <form>
-              <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+              <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
+                Search
+              </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                   <svg
@@ -81,17 +82,23 @@ const NavBar = () => {
             <div className="flex items-center ml-3">
               <div>
                 <button
-                  style={{ background: "red" }}
                   type="button"
                   className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                   aria-expanded="false"
-                  data-dropdown-toggle="dropdown-user"
+                  // data-dropdown-toggle="dropdown-user"
                 >
                   <span className="sr-only">Open user menu</span>
-                  <img className="w-8 h-8 rounded-full" src={user ? user.avatarUrl: defaultAvatar} alt="user photo" />
+
+                  {image &&<Image
+                    className="w-8 h-8 rounded-full"
+                    src={image}
+                    width={30}
+                    height={30}
+                    alt="user photo"
+                  />}
                 </button>
               </div>
-              <div
+              {/* <div
                 className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
                 id="dropdown-user"
               >
@@ -133,7 +140,7 @@ const NavBar = () => {
                     </a>
                   </li>
                 </ul>
-              </div>
+              </div> */}
             </div>
             <div className="relative m-6 inline-flex w-fit">
               <div className="nav-avatars_notificationIcon">

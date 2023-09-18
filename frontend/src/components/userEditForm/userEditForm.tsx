@@ -74,6 +74,7 @@ const UserEditForm = () => {
           aria-describedby="file_input_help"
           id="file_input"
           type="file"
+          placeholder="upload image"
           onChange={(e) => handleAvaUpload(e)}
         />
 
@@ -106,7 +107,7 @@ const UserEditForm = () => {
           Save
         </button>
 
-        {errorMessage ? <button style={{ color: "red" }}>Error: {errorMessage}</button> : null}
+        {errorMessage ? <p style={{ color: "red" }}>Error: {errorMessage}</p> : null}
       </div>
 
       {formStats.showForm ? (

@@ -10,7 +10,7 @@ export default function Dashboard() {
   const accessToken = searchParams.get("accesstoken");
   const isfirstLogin = searchParams.get("firstlogin");
 
-  const fetchCurrentUser = useUserStore((state) => state.fetchMe);
+  const fetchCurrentUser = useUserStore((state) => state.getUser);
 
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function Dashboard() {
   }, []);
 
    useEffect(() => {
-    console.log("useffect navbar render....");
+    console.log("useffect dashboard render....");
       fetchCurrentUser();
   }, []);
 
