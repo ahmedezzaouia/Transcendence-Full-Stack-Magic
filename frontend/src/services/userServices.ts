@@ -19,7 +19,7 @@ export const fetchUser = async (url: string) => {
     return user;
   } catch (error) {
     console.log("Error fetching user", error);
-    throw new Error("Unexpected error while fetching user");
+    throw (error)
   }
 };
 
@@ -46,7 +46,7 @@ export const fetchLoggedUser = async () => {
 
     return user;
   } catch (error) {
-    throw new Error('Unexpected error while fetching me');
+    throw (error);
   }
 };
 

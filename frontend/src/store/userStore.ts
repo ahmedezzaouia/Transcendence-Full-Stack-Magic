@@ -1,6 +1,12 @@
 import { fetchLoggedUser } from "@/services";
-import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { create, StateCreator } from "zustand";
+import {
+  persist,
+  devtools,
+  PersistOptions,
+  DevtoolsOptions,
+  createJSONStorage 
+} from "zustand/middleware";
 import { User } from "@/types";
 
 interface UserStore {
@@ -9,27 +15,37 @@ interface UserStore {
   getUser: () => Promise<void>;
 }
 
+type MyPersist = (
+  config: StateCreator<UserStore>,
+  options: PersistOptions<UserStore>
+) => StateCreator<UserStore>;
+
+type MyDevTools = (
+  config: StateCreator<UserStore>,
+  options: DevtoolsOptions
+) => StateCreator<UserStore>;
+
 const useUserStore = create<UserStore>(
-  persist(
-    devtools((set) => ({
-      user: null,
-      setUser: (user) => set({ user }),
-      getUser: async () => {
-        try {
-          const newUser = await fetchLoggedUser();
-          set({ user: newUser });
-        } catch (error) {
-          console.error("Error fetching user:", error);
-        }
-      },
-    })),
-    (set) => ({
-      name: 'user-store', // Provide the name for the persisted store (change to your preferred name).
-      get storage() {
-        // Specify the storage medium (e.g., localStorage or sessionStorage).
-        return localStorage;
-      },
-    })
+  (persist as MyPersist)(
+    (devtools as MyDevTools)(
+      (set) => ({
+        user: null,
+        setUser: (user) => set({ user }),
+        getUser: async () => {
+          try {
+            const newUser = await fetchLoggedUser();
+            set({ user: newUser });
+          } catch (error) {
+            console.error("Error fetching user:", error);
+          }
+        },
+      }),
+      { name: "user-store-devtools" } // Name for devtools
+    ),
+    {
+      name: "user-store",
+      storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
+    }
   )
 );
 
